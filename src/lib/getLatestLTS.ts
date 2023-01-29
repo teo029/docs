@@ -174,7 +174,7 @@ export default function getLatestLTS (framework) {
   let latest
   for (var i in downloadedFrameworks[framework]) {
     latest = downloadedFrameworks[framework][i]
-    if (latest.version.match(/.*alpha.*/)) {
+    if (latest.version.match(/.*alpha.*/) || latest.version.match(/.*beta.*/)) {
       continue
     } else {
       break;
