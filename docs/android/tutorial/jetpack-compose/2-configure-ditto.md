@@ -123,7 +123,7 @@ These Task documents will all be in the "tasks" collection. We will be referenci
 val tasksCollection = TasksApplication.ditto!!.store["tasks"]
 ```
 
-Ditto documents have a flexible structure. Oftentimes, in strongly-typed languages like Kotlin, we will create a data structure give more definition to the app.
+Ditto documents have a flexible structure. Oftentimes, in strongly-typed languages like Kotlin, we will create a data structure to give more definition to the app.
 
 Create a new Kotlin file called __Task.kt__ in your project.
 
