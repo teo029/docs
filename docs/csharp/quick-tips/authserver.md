@@ -144,6 +144,7 @@ const ditto = new Ditto(identity, 'ditto')
 
 const config = new TransportConfig()
 config.connect.websocketURLs.push('ws://127.0.0.1:45001')
+config.enableAllPeerToPeer()
 ditto.setTransportConfig(config)
 ditto.startSync()
 ```
