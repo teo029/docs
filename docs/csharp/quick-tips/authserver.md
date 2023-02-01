@@ -235,6 +235,7 @@ const config = new TransportConfig()
 //highlight-start
 config.connect.websocketURLs.push('wss://127.0.0.1:45001')
 //highlight-end
+config.enableAllPeerToPeer()
 ditto.setTransportConfig(config)
 ditto.startSync()
 ```
