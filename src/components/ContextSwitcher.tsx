@@ -34,11 +34,9 @@ const ContextSwitcher = ({ className }) => {
     if (platform && platform !== doc && doc === 'common') {
       return history.push(`/${platform}${path}`)
     }
-
     const currContext = getContext(doc);
-
-    setTabGroupChoices("platform", context.id)
     if (currContext && currContext.id !== context.id) {
+      setTabGroupChoices("platform", currContext.id)
       setContext(currContext);
     }
   }, []);
