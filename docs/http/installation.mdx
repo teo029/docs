@@ -106,11 +106,11 @@ portal.
 
 There are specific cases where a broad, long-lived HTTP API key is not the right
 authorization mechanism. For user-scoped credentials, you can use a JWT retrieved from [Online With
-Authentication](../common/security/authentication/overview) to secure your
+Authentication](../common/security/authentication) to secure your
 HTTP endpoint. To retrieve a JWT for a particular user, send a POST request to the Big Peer
 with the given provider and the user's token.
 
-1. First, set your application to enable Authentication using OnlineWithAuthentication. This involves deploying an authentication server on a publicly-accessible URL by following the [tutorial](./common/security/authentication/tutorial).
+1. First, set your application to enable Authentication using OnlineWithAuthentication. This involves deploying an authentication server on a publicly-accessible URL by following the [tutorial](./common/security/authentication#tutorial).
 2. Send a POST request to the `/_ditto/auth/login` endpoint. This is the same endpoint used to authorize small peers access, used by the `OnlineWithAuthentication` identity.
 
 ```
