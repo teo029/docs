@@ -5,6 +5,15 @@ import snippets from '../../snippets.json';
 import CodeBlock from '@theme/CodeBlock';
 import Tabs from '../theme/Tabs';
 import TabItem from '../theme/TabItem';
+import LANGUAGES from './Languages.js';
+
+const getContext = (id) => LANGUAGES.find((context) => context.id === id);
+
+const pathExists = (context, path, data) => {
+  let docs = data[context].versions[0].docs
+  let some = docs.some((doc) => doc.path === path);
+  return some
+};
 
 export function Snippet({name, language, label}) {
   let lang = snippets[language]
@@ -27,11 +36,12 @@ export function Snippet({name, language, label}) {
 
 export default function SnippetGroup({children, name}) {
   const { tabGroupChoices, setTabGroupChoices } = useUserPreferencesContext();
-  const platform = tabGroupChoices['platform']
+
+  const currContext = getContext(tabGroupChoices["platform"]);
+  let platform = currContext ? currContext.id : "ios"
   const languages = getLanguagesForPlatform(platform)
   const lang = languages[0]
-
-
+  
   return <Tabs
     platform={platform}
     groupId="programming-language"
