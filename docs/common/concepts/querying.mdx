@@ -121,10 +121,10 @@ Keys in the query syntax by default must be alphanumeric or include underscore (
 ### Compound - And `&&`, Or `||`, Not `!`, Contains `contains`
 
 
-Use `&&` for a logical __and__ Predicate; similar to SQLite's AND
+Use `&&` for a logical __and__ Predicate; similar to SQL AND statements. 
 ```js
 // finds documents that have a theme property equal to "Dark" and a name property equally to "Light"
-"theme == 'Dark' && name == 'Light'"
+"theme == 'Dark' && name == 'Light'
 ```
 
 Use `||` for a logical __or__ predicate; similar to SQL OR statements
@@ -138,6 +138,14 @@ Use `!` for a logical __not__ predicate; similar to SQL NOT statements
 ```js
 // finds documents that are neither "Hamilton" nor "Morten"
 "!(name == 'Hamilton' || name == 'Morten')"
+```
+
+Make sure you wrap all chained boolean operators in parenthesis:
+
+
+```js
+// chained boolean operators need parens
+"(theme == 'Dark' && name == 'Light') || finished == false"
 ```
 
 Use `contains(array, value)` to check if an array contains a value. 
