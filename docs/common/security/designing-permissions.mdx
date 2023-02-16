@@ -146,15 +146,11 @@ further hop.
 
 ### Read-only security model
 
-You can allow small peers to read documents in a collection *without permission
-to write*. This can be useful in situations where you have restrictive user
-roles, which can be identified by the document id. The asset in this situation
-is a document, and Ditto ensures that only those authorized to create documents
-with a particular id are able to syncronize those documents in a trustworthy
-manner throughout the system. 
+Because Ditto peers are only ableto syncronize data directly from a peer that has the authority to write that document, a read-only security model comes with some caveats. This section covers how to best implement this security model and the trade-offs that exist in peer-to-peer networks.
 
-To implement read-only documents, you should create restrictive write permissions that include the
-`userId` inside of the document `_id`. 
+Ditto provides a mechanism to specify which small peers can read documents in a collection *without permission to write*. This can be useful in situations where you have restrictive user roles, such as customer and employee. 
+
+To implement read-only documents, you should create restrictive write permissions that include the `userId` inside of the document `_id`.  Ditto ensures that only those authorized to create documents with a particular document `_id` are able to syncronize those documents in a trustworthy manner throughout the system. 
 
 ```
 {
