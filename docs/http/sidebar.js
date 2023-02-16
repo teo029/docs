@@ -14,7 +14,6 @@
             'common/concepts/querying',
             'common/concepts/writing',
             'common/concepts/remove',
-            'common/concepts/designing-permissions',
             "timeseries",
           ]
         },
