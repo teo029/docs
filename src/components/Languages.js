@@ -6,7 +6,7 @@ import {
   AppleIcon,
   RustIcon,
   PiIcon,
-  Flutter,
+  Python,
   CPlusPlus
 } from '../assets/icons';
 
@@ -52,9 +52,9 @@ export default [
     icon: CPlusPlus 
   },
   {
-    id: 'flutter',
-    name: 'Flutter',
-    icon: Flutter,
+    id: 'python',
+    name: 'Python',
+    icon: Python,
     disabled: true
   }
 ];
