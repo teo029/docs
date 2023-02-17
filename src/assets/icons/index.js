@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { CPlusPlus as CPP , Android, Apple, Flutter } from '@styled-icons/boxicons-logos';
+import { CPlusPlus as CPP , Android, Apple, Python } from '@styled-icons/boxicons-logos';
 import { Curl as HttpIcon } from '@styled-icons/simple-icons';
 import { Dotnet , Xamarin } from '@styled-icons/simple-icons';
 import { Rust, RaspberryPi } from '@styled-icons/fa-brands';
@@ -41,7 +41,7 @@ const DotNetIcon = ({ className, ...props }) => {
 
 
 export { JSIcon } from './JSIcon';
-export { RustIcon, XamarinIcon, Flutter, AndroidIcon, CPlusPlus, AppleIcon, HttpIcon, DotNetIcon, PiIcon};
+export { RustIcon, XamarinIcon, AndroidIcon, CPlusPlus, AppleIcon, HttpIcon, DotNetIcon, PiIcon, Python};
 
 export { KotlinIcon } from './KotlinIcon';
 export { SwiftIcon } from './SwiftIcon';
