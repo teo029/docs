@@ -100,7 +100,7 @@ module.exports = {
       logo: {
         href: "https://ditto.live",
         alt: "Ditto Logo",
-        src: "img/logo.png",
+        src: "img/logos/blue.png",
       },
       items: [
         { href: "/", label: "Documentation", position: "left" },
