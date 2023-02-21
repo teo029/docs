@@ -1,0 +1,94 @@
+---
+title: 'Ditto Bus'
+---
+
+import SnippetGroup from '@site/src/components/SnippetGroup';
+
+:::danger
+*The Ditto Bus API is currently **Experimental** and should not be used in production scenarios*
+:::
+
+The Ditto Bus is designed to enable developers to leverage the underlying mesh network to transmit data peer-to-peer without using the Ditto Store. It can be used to send one-off messages or create continuous channels with other peers in the mesh. The Ditto bus does not persist data.
+
+Messages are treated as opaque binary by Ditto and must be created and interpreted by your application.
+
+## Example Use Cases
+
+- Voice and video streaming
+- Remote control systems
+- Tunneling other protocols
+- Gaming
+
+## Version Support & Imports
+
+### Version Support
+
+The Ditto bus is included as experimental in SDK version `3.0.0` and later. 
+
+### Import
+
+It can be imported in a file through the standard `DittoSwift` import.
+
+```swift
+import DittoSwift
+```
+
+## Getting PeerAddress
+
+To be able to send a message or establish a connection you need to know the peer you want to connect to.
+
+[ObservingPeers Docs](../common/mesh-network/manual#observing-peers) 
+
+<SnippetGroup
+  name='bus-peers-first-user' 
+/>
+
+## Sending Messages
+
+Messages can be sent as single one-off messages or through establishing a bidirectional stream with another peer. All transports are peer-to-peer and require having the address of the peer you are connecting to.
+
+### Reliable Single Message
+User1 sends a single reliable message to User2
+
+<SnippetGroup
+  name='bus-single-message-receive' 
+/>
+<SnippetGroup
+  name='bus-reliable-single-message-send' 
+/>
+
+### Unreliable Single Message
+User1 sends a single unreliable message to User2
+
+<SnippetGroup
+  name='bus-single-message-receive' 
+/>
+<SnippetGroup
+  name='bus-unreliable-single-message-send' 
+/>
+
+### Reliable Bidirectional Stream
+User1 establishes a reliable bidirectional stream with User2. Both users can enqueue messages on the stream. Messages are ordered and guarantee. 
+
+<SnippetGroup
+  name='bus-bidirectional-stream-handler'
+/>
+<SnippetGroup
+  name='bus-reliable-bidirectional-stream-sender'
+/>
+<SnippetGroup
+  name='bus-bidirectional-stream-common'
+/>
+
+### Unreliable Bidirectional Stream
+User1 establishes an unreliable bidirectional stream with User2. Both users can enqueue messages on the stream. Messages are not ordered or guarantee.
+
+<SnippetGroup
+  name='bus-bidirectional-stream-handler'
+/>
+<SnippetGroup
+  name='bus-unreliable-bidirectional-stream-sender'
+/>
+<SnippetGroup
+  name='bus-bidirectional-stream-common'
+/>
