@@ -149,7 +149,6 @@ namespace Tasks
 
             try
             {
-                ditto.SetOfflineOnlyLicenseToken("<REPLACE_ME>");
                 DittoTransportConfig transportConfig = new DittoTransportConfig();
 
                 // Enable Local Area Network Connections

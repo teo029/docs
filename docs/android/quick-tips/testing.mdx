@@ -58,22 +58,21 @@ fun dependenciesWithCustomDirectory(customDir: File): DittoDependencies {
 
 ### Initialize ditto
 
-You can create a default identity -- we use `offlinePlayground` here, but you
+You can create a default identity -- we use `onlinePlayground` here, but you
 should test with whatever identity you are using in production.
 
 ```kotlin
-val const testLicense = "YOUR_LICENSE_HERE"
-
 @JvmOverloads
 fun getDitto(
     dependencies: DittoDependencies,
-    identity: DittoIdentity = DittoIdentity.OfflinePlayground(dependencies),
+    identity: DittoIdentity = DittoIdentity.OnlinePlayground(
+            appID = "REPLACE_ME", 
+            dependencies = androidDependencies, 
+            token = "REPLACE_ME"
+    ),
     offlineLicense: String? = testLicense,
 ): Ditto {
     val ditto = Ditto(dependencies, identity)
-    offlineLicense?.let {
-        ditto.setOfflineOnlyLicenseToken(it)
-    }
     return ditto
 }
 

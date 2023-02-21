@@ -47,12 +47,10 @@ public class DittoInstance {
 
         self.instanceDir = instanceDir
         self.ditto = Ditto(
-            identity: .offlinePlayground(appID: appID, persistenceDirectory: instanceDir),
+            identity: .onlinePlayground(appID: appID, persistenceDirectory: instanceDir),
             persistenceDirectory: instanceDir
         )
         //highlight-end
-        let testLicense = "YOUR_LICENSE_HERE"
-        try! self.ditto!.setOfflineOnlyLicenseToken(testLicense)
     }
     
     public func stop() {

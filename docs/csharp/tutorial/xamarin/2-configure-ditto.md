@@ -27,7 +27,7 @@ When Visual Studio generated your project, there should be a file called **AppDe
 3. After the app has finished launching we will add a working directory. Currently, Xamarin.iOS apps need to provide a working directory inside the app's sandbox. Without this, the default directory used by the SDK won't be writable and an exception will be thrown.
 4. Construct an instance of Ditto with an online playground identity using the APP ID and Playground Token of the app that you just created on the portal. We are using an `.OnlinePlayground` setup, which should suffice for this tutorial. However, you should never deploy this to a production environment.
 5. We want to enable all peer to peer transport configurations
-6. We will call `startSync()`. This method can throw an error in the event that the license token is invalid or expired.
+6. We will call `startSync()`.
 
 ```csharp title=AppDelegate.cs
 using Foundation;

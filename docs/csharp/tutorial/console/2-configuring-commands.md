@@ -98,7 +98,6 @@ namespace Tasks
 
             try
             {
-                ditto.SetOfflineOnlyLicenseToken("<REPlACE_ME>");
                 ditto.StartSync();
             }
             catch (DittoException ex)
