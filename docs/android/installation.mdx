@@ -27,7 +27,7 @@ For Java on desktop apps, please contact us at [support@ditto.live](mailto:suppo
 2. Ensure that `mavenCentral()` is in the project-level **build.gradle** file like so:
 
 ```
-buildscript {
+allprojects {
     repositories {
         mavenCentral()
     }
@@ -41,7 +41,7 @@ buildscript {
 4. Configure your manifest with the following permissions. Ditto's required
    permissions have changed since Android 13. Refer to [Android Platform
    Permissions](#android-platform-permissions) for details.
-   
+
 5. Access the [portal](https://portal.ditto.live) to create a new app. Apps created on the portal will automatically sync data between them and also to the Ditto Big Peer. Each app created on the portal has a unique `appID` which can be seen on your app's settings page once the app has been created. This ID is used in subsequent sections to configure your Ditto instance.
 
 6. Create your Ditto instance as below. We recommend placing this in your Application.onCreate method:
@@ -68,17 +68,24 @@ buildscript {
 
 ### Android Platform Permissions
 
-The Android operating system restricts access to some functionality for the sake
-of user control and privacy. Therefore, to unlock the full capabilities of Ditto,
-it is essential to configure your app so that it requests all the permissions that it needs.
-
-First you must add the following permissions to your app's `AndroidManifest.xml` file.
+The Android operating system restricts access to some device functionality for
+the sake of user control and privacy. Therefore, to unlock the full capabilities
+of Ditto, it is essential to configure your app so that it requests all the
+permissions that it needs.
 
 Then at runtime your app must prompt the user to request certain permissions.
 
 #### Android Manifest Permissions
 
-```xml
+The Ditto Android SDK includes a set of permissions that are required to use all
+the device features necessary to enable sync. The permissions below will be
+automatically merged into your app's final manifest.
+
+```xml title=AndroidManifest.xml
+<manifest
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
 <uses-permission android:name="android.permission.BLUETOOTH"
     android:maxSdkVersion="30" />
 <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
@@ -105,38 +112,42 @@ Then at runtime your app must prompt the user to request certain permissions.
     tools:targetApi="tiramisu" />
 ```
 
+The `tools:targetApi` attribute causes the permission to only be requested on
+devices running the specified API level or higher. This avoids errors on older
+OS versions that do not recognize the permission.
 
-Since the Ditto SDK does not use BLE to locate the user physically it assumes you
-are using the `neverForLocation` flag on `BLUETOOTH_SCAN`.
-On Android 12, this means that `ACCESS_FINE_LOCATION` is no longer required.
-If you wish to use `ACCESS_FINE_LOCATION` on an app targeting API level 31+, you
-must check for and request this permission on your own. Refer to the
-[Android Documentation](https://developer.android.com/guide/topics/connectivity/bluetooth/permissions)
-for details.
+The `android:maxSdkVersion` attribute causes that permission to only be requested
+on devices running the specified SDK level or lower. This avoids asking for more
+permissions than Ditto needs, however it will prevent your app from being able
+to request the permission on devices running a newer OS version. To opt out of
+this behavior and request the permission on all OS versions, see the following
+snippet:
 
-#### Legacy Manifest (API Level <= 30)
-
-The following manifest is sufficient for apps that are not yet targeting Android 12 (API 31).
-
-```xml title=AndroidManifest.xml
-<uses-permission android:name="android.permission.BLUETOOTH" />
-<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+```xml title="Location Permission Override"
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+    tools:remove="android:maxSdkVersion" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"
+    tools:remove="android:maxSdkVersion" />
 ```
 
-In these older Android versions, `ACCESS_FINE_LOCATION` is mandatory and Ditto
-will check that it is present.
+> Note that you may need to add the `xmlns:tools="http://schemas.android.com/tools"`
+> namespace attribute to your app's root `<manifest>` tag as shown in the
+> `AndroidManifest.xml` example above.
+
+This will configure your app's build to ignore the `android:maxSdkVersion`
+attribute in our SDK allowing the permission to be requested on any SDK version.
+This techniquie can be used to tweak any permissions to your liking.
+
+For more details, see the documentation for the
+[Bluetooth](https://developer.android.com/guide/topics/connectivity/bluetooth/permissions)
+and
+[WiFi Aware](https://developer.android.com/guide/topics/connectivity/wifi-permissions)
+permissions in the Android Documentation.
 
 #### Runtime Permissions
 
-Bluetooth LE and WiFi Aware require location permissions. Your apps must ensure all required permissions for sync have been requested from
+Bluetooth LE and WiFi Aware require the user to allow permissions at runtime.
+Your apps must ensure all required permissions for sync have been requested from
 the user. The Android Ditto SDK provides a `DittoSyncPermissions` helper which
 makes this easy. Call the following in your Activity or Fragment's `onCreate` method:
 
@@ -150,9 +161,9 @@ makes this easy. Call the following in your Activity or Fragment's `onCreate` me
 }>
 <TabItem value="kotlin">
 
-In Kotlin, `DittoSyncPermissions` requires a Context. You can get the context by
-invoking getApplicationContext(), getContext(), getBaseContext() or `this` when
-in a class that extends from Context, such as the Application, Activity, Service
+The `DittoSyncPermissions` object requires a Context. You can get the context by
+invoking `getApplicationContext()`, `getContext()`, `getBaseContext()` or `this`
+when in a class that extends from Context, such as the Application, Activity, Service
 and IntentService classes.
 
 ```kotlin
@@ -176,8 +187,7 @@ fun checkPermissions() {
     }
 }
 ```
-    
-   
+
 On Android there may be a noticeable delay between when the user grants location
 access and when Ditto notices the new permission. For this reason it is
 recommended to call `refreshPermissions()` whenever a relevant permission might
@@ -195,7 +205,6 @@ override fun onRequestPermissionsResult(
     ditto?.refreshPermissions()
 }
 ```
-
 
 </TabItem>
 <TabItem value="java">
@@ -223,7 +232,7 @@ public void onRequestPermissionsResult(int requestCode, String[] permissions, in
    this.ditto.refreshPermissions();
 }
 ```
-    
+
 </TabItem>
 </Tabs>
 
