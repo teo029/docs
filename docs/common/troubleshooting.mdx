@@ -58,6 +58,10 @@ Ensure that you are only creating a fixed number of live queries, with a smaller
 
 #### Do you have a firewall or proxy enabled that is blocking Ditto's connection to the Big Peer?
 
+A proxy may either either block connections or cause errors in the log by substituting its own
+TLS certificate: `invalid certificate: UnknownIssuer`. If you see this log message you will either
+need to get Ditto unblocked or add the CA certificate to the Small Peer's trusted certificate store.
+
 Verify that you can reach the following endpoints. You should see the output exactly as written below:
 
 ```
