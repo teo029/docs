@@ -9,12 +9,23 @@ import SnippetGroup from '@site/src/components/SnippetGroup';
 
 There are instances where you may want to configure additional connections configurations for the current Ditto instance. This section will teach you how to configure your Ditto instance to listen for connections on a port explicitly and to connect to remote instances via a host (IP) and port. To do this, _before_ you call `startSync()`, construct a `DittoTransportConfig` value and set `ditto.SetTransportConfig`.
 
-:::info
 Ditto will automatically attempt to connect to other ditto instances on
 the Local Area Network, Bluetooth, and AWDL. However, if you supply a
 `DittoTransportConfig`, this will not automatically be enabled. You'll need to
 remember to enable peer to peer connnections with `EnableAllPeerToPeer()`.  
-:::
+
+## Enabling/Disabling Transports
+
+You can enable all peer to peer connections with `EnableAllPeerToPeer()`. You can also customize which transports are used by enabling/disabling each transport separately.
+
+<SnippetGroup name="transport-configurations" />
+
+## Sync to Ditto Cloud
+
+In order to sync to the Ditto Cloud you must use an online identity (onlinePlayground, onlineWithAuthentication). When setting up the online identity there is a boolean parameter called `enableDittoCloudSync` which allows you to enable/disable syncing with the Ditto Cloud. `enableDittoCloudSync` is set to true by default.
+
+<SnippetGroup name="online-playground-cloudSync" />
+
 
 ## Enabling/Disabling Transports
 
@@ -53,24 +64,46 @@ your [ditto live query](../concepts/querying)
 ## Sync Groups
 
 When peer-to-peer transports are enabled, all devices with the same App ID will
-normally form an interconnected mesh network. In some situations it may be
-desirable to have distinct groups of devices within the same app, so that
-connections will only be formed within each group. The `syncGroup` parameter
-changes that group membership. A device can only ever be in one sync group, which
-by default is group 0. Up to 2^32 distinct group numbers can be used in an app.
+form an interconnected mesh network. If you have knowledge ahead of time that
+devices are in distinct groups that should only sync with each other, you can
+optimize performance by restricting them from syncronizing with each other. 
 
-This is an optimization, not a security control. If a connection is created
+The `syncGroup` parameter provides this functionality. A device can only ever be
+in one sync group, which by default is group 0. Up to 2^32 distinct group
+numbers can be used in an app. Using a sync group is more performant, and is
+recommended in any case where this knowledge is known ahead of time.
+
+<div style={{display: 'flex', "justify-content": "center"}}>
+  <img style={{"width": '300px'}} src="/img/sync-group.png" />
+<p style={{"width": '500px'}}>
+
+:::info
+For example, imagine an application that supports two different restaurant
+locations: 1234 and 7890. When a device identifies itself to the Big Peer, it gives it's 
+location ID as part of the authentication callback. Before calling
+`startSync()`, you can use a different sync group for each restaurant. Only
+restaurants in the same sync group will sync with eachother.
+:::
+</p>
+
+
+</div>
+
+
+
+<SnippetGroup name="transport-sync-groups" />
+
+
+
+:::info
+#### Note: sync groups are not a security mechanism
+Sync groups are an optimization, not a security control. If a connection is created
 manually, such as by specifying a `connect` transport, then devices from
 different sync groups will still sync as normal. If two groups of devices are
 intended to have access to different data sets, this must be enforced using
 Ditto's permissions system.
+:::
 
-For example, imagine an application that supports multiple different restaurant
-locations. When a device identifies itself to the Big Peer, it is given a
-location ID as part of the authentication callback. Before calling
-`startSync()`, you can use a different sync group for each restaurant.
-
-<SnippetGroup name="transport-sync-groups" />
 
 ## Connecting to a Remote Ditto Peer
 
