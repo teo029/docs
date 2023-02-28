@@ -18,12 +18,6 @@ iOS and Android devices are able to create peer to peer WiFi connections with ea
 * Bluetooth Low Energy
 iOS and Android devices are able connect with each other over a standard Bluetooth Low Energy (BLE) connection. Ditto supports both Bluetooth 4.x and 5.x protocols seamlessly. Bluetooth 5 devices are able to communicate with each other over a higher bandwidth (an average of 1.8 Megabits per second). If a Bluetooth 5.x device needs to connect with a Bluetooth 4.x device, the devices will connect over a Bluetooth 4.x protocol.
 
-### What is the typical bandwidth of Ditto syncing over Bluetooth?
-
-* If two Bluetooth 4.x devices are syncing with each other: about 2.5 kilobits per second.
-* If two Bluetooth 5.x devices are syncing with each other: about 2.1 megabits per second (that's a lot faster!)
-* If a Bluetooth 4.x device is trying to sync with a Bluetooth 5.x device, then we are still looking at 2.5 kilobits per second.
-
 ### What are the device and operating system requirements?
 
 * iOS: Ditto can run on devices as low as iOS 12. This is over 98% of iOS devices as measured by the App Store. [See here for more information](https://developer.apple.com/support/app-store/).
@@ -61,11 +55,11 @@ Ditto can be used in Airplane Mode. If Bluetooth or WiFi is manually toggled on 
 
 ### How fast is the sync?
 
-* WiFi: the full speed of your connection
+* WiFi: the full speed of your connection, typically 1 gigabyte of data in times as low as 8 seconds. 
 * WiFi Direct: similar to WiFi speeds
-* Bluetooth LE: typically 4 kB/second (higher speeds currently in development)
+* Bluetooth LE: typically 20 kB/second (however, if you’re using a device that is below Android 10, then Ditto will use BLE GATT which is only 4 kB/second.)
+* The Big Peer: 40k transactions per second (25k write txns + 15k reads)
 
-The Big Peer can handle 40k transactions per second (25k write txns + 15k reads) and the peer-to-peer sync over WiFi (LAN) can do 1 gigabyte of data in times as low as 8 seconds. For Bluetooth, if you’re using modern phones you have BLE L2CAP which will get in the order of 20 kilobytes per second. If you’re using a rather old phone (e.g. pre Android v8) then it will use BLE GATT which is a few kilobytes per second.
 
 ### How much data can Ditto hold? How big can a Ditto document be?
 
