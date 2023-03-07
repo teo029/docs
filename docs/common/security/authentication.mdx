@@ -612,8 +612,9 @@ pass information back to client.
 app.post('/', async (req, res) => {
   const token = req.body.token;
   try {
-    const { userId } = await checkToken(token)
-    // payload = getDittoPermissions(userId)
+    // The token that your server receives from ditto is always a string
+    let parsedToken = JSON.parse(token)
+    let payload = getDittoPermissions(parsedToken)
     res.json(payload)
   } catch (err) {
     res.json({
