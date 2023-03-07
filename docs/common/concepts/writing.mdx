@@ -68,16 +68,18 @@ This results in the `name` and `age` changing, but `isOnline` is untouched:
 ```
 ### Default Data
 
-Default Data can be thought of as "placeholder" data.  Default Data is useful when your app needs to load "starter" data from an external data source, like from a backend API, on multiple devices without creating odd "overwriting" behavior.
-
-Ditto's approach to conflict resolution orders changes by time. In most situations, this leads to predictable behavior. However, if your application is upserting the same initial data into multiple devices, such as common data from a central backend API, this could result in overwriting later changes:
+Default Data can be thought of as "placeholder" data.  Default Data is useful when your app needs to load "starter" data from an external data source, like from a backend API, on multiple devices. Ditto's approach to conflict resolution orders changes by time. In most situations, this leads to predictable behavior. However, if your application is upserting the same initial data into multiple devices, such as common data from a central backend API, this could result in overwriting later changes:
 
 1. Device A upserts a document `{"firstName": "Adam"}` at time = 0 after downloading from a central API.
 2. Device A updates the document to `{"firstName": "Max"}` at time = 1.
 3. Device B synchronizes with Device A receiving the document `{"firstName": "Max"}` at time = 2.
-4. Device B downloads the same document from the backend API `{"firstName": "Adam"}` and upserts at t = 3, which overwrites the previous change synced at time = 1.
+4. Device B downloads the same document from the backend API `{"firstName": "Adam"}` and upserts at t = 3, which overwrites the previous change synced at time = 
 
-In the above example, both Device A and B want to preserve the change by Device A that occurred after downloading the common data. To do so, Ditto offers an additional parameter: isDefault.
+In the above example, both Device A and B want to preserve the change by Device A that occurred after downloading the common data. To do so, Ditto offers an additional parameter: isDefault. 
+
+:::warning
+If you insert the same data on each peer without using the default data API, each device will accumulate unbounded metadata, which could cause the local disk space to grow infinitely.
+:::
 
 <SnippetGroup
   name='upsert-default-data' 
