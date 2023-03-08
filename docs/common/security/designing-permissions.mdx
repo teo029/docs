@@ -63,9 +63,9 @@ documents the user can read or write.
 
 The following write permissions below describe that `userID: "123abc"` can
 
-1. `write` to documents in the `"books"` collection where the `_id.title` value `endsWith('Potter')`.
+1. `write` to documents in the `"books"` collection where the `_id.locationId == 'abcedef123456'`.
 2. `write` to any document in the `"newspapers"` collection. We use a single value of `true` 
-3. `read` to documents in the `"books"` collection where the `_id.title` value `endsWith('Potter')`.
+3. `read` to documents in the `"books"` collection where the `_id.locationId == 'abcedef123456'`
 
 ```jsonc
 {
@@ -79,7 +79,7 @@ The following write permissions below describe that `userID: "123abc"` can
         // highlight-start
         // 1. 
         "books": [
-          "endsWith(_id.title, 'Potter')"
+          _id.locationId == 'abcedef123456'
         ],
         // highlight-end
         
@@ -97,7 +97,7 @@ The following write permissions below describe that `userID: "123abc"` can
         // highlight-start
         // 3.
         "books": [
-          "endsWith(_id.title, 'Potter')"
+          _id.locationId == 'abcedef123456'
         ],
         // highlight-end
       }
