@@ -1,6 +1,6 @@
 # Troubleshooting
 
-## Ditto won't sync
+## Android and iOS apps are not syncing, why?
 
 If you are having trouble synchronizing devices in Ditto, follow this guide.
 
@@ -9,37 +9,11 @@ If you continue to have problems, please email us at
 account](https://portal.ditto.live) to chat with the support bot in the lower
 right corner of your screen. An engineer will reach out to you shortly.
 
-### Synchronization seems slow, or comes to a halt over time
-
-Ensure that you are only creating a fixed number of live queries, with a smaller amount of data. Do not use `findAll()`. 
-
-### General diagnostics
-
-1. Set `DittoLogger.minimumLogLevel = DittoLogLevel.VERBOSE` before you initialize `Ditto(identity)`.
+1. Set `DittoLogger.minimumLogLevel` to `Debug` before you initialize `Ditto(identity)`.
 1. Look at the logs. Do you see any helpful errors or warnings?
 1. Verify that your app id is the same on all devices
 
-### Bluetooth 
-
-1. Turn Use Location on
-1. Turn Bluetooth Scanning on
-1. Are permissions set correctly? See [installation](../installation).
-1. Go to your OS-level permissions for Bluetooth and clear the app permissions for your application.
-1. Delete the app, install it again, and open it. Does it ask for Bluetooth permissions?
-1. Android only: are you calling `ditto.refreshPermissions()`?
-
-### Apple Wireless Direct Link, P2P-Wifi, Wifi Aware 
-
-1. Are permissions set correctly? See [installation](../installation).
-1. Go to your OS-level permissions and clear the app permissions for your application.
-1. Delete the app, install it again, and open it. Does it ask for location permissions?
-1. If you are using a custom `TransportConfig`, make sure you have enabled all peer-to-peer transports using `enableAllPeerToPeer()`.
-
-### Local Area Network (LAN)
-
-1. Are permissions set correctly? See [installation](../installation).
-1. Are both devices connected to the same WiFi network?
-1. Check your router settings and see the [LAN troubleshooting guide](./mesh-network/supported-transports/#local-area-network).
+If there is nothing in the logs, see the following sections for more information.
 
 ### Online Playground 
 
@@ -93,13 +67,106 @@ your IT administrator to see if your computer is configured to block WebSocket c
 
 ### Online with Authentication
 
-1. Did you follow the [tutorial](./security/authentication#tutorial)?
-1. Is the website address behind `https` and available on the open Internet? 
-1. Verfiy that your server is reachable by the Big Peer at `https://APP_ID.ditto.live` and `https://cloud.ditto.live`.
-1. Are you implementing the [authentication expiring soon](./security/authentication#creating-your-client) delegate?
-1. Verify that your webhook provider name is [correctly copied in the Ditto portal](./security/authentication#login).
+:::info
+Verify this isn't simply a permission misconfiguration issue. Are you able to
+try the operations with global read and write permission to verify it succeeds
+in this case? That could narrow down what's going on.
+:::
 
-# Debugging Blocked Transactions
+#### Did you follow the [tutorial](./security/authentication#tutorial)?
+
+The tutorial is your best guide for implementing this correctly. See the [code on GitHub for a complete working example](https://github.com/getditto/samples/tree/main/authentication).
+
+#### Is the server behind `https` and open? 
+
+Ensure that Ditto's Big Peer server hosted in the United States on AWS can send a POST request to your authentication server. 
+
+#### Are you implementing the delegates correctly? 
+
+`authenticationExpiringSoon` and `authenticationRequired` both need to be
+implemented according to the [sample
+code](./security/authentication#creating-your-client).
+
+Do not create subscriptions inside the callbacks. These callbacks are only
+called on first launch and when the certificate expires.
+
+#### Verify that your webhook provider name is [correctly copied in the Ditto portal](./security/authentication#login).
+
+The provider name given to the Ditto Client must match a provider name in the Portal (e.g., `my-auth`).
+
+
+![Sample Authentication Webhook Endpoint in the Portal](./security/sample-authentication-webhook-endpoint.png)
+
+
+#### What are the permissions that you are returning for this client? 
+
+Are the permissions allowing write and read access to the collection? Are you able to try the operations with global read and write permission to verify it succeeds in this case?
+
+#### Is your AuthClient becoming garbage collected?
+
+Ensure that you keep a reference to the AuthClient in scope for the duration that Ditto is also active.  You should attach the dittoAuth variable to the object so it does not get garbage collected. 
+
+For example:
+```
+namespace Sync {
+    public class DittoClient {
+        private Ditto ditto;
++       private DittoAuthDelegate dittoAuthDelegate;
+
+        public DittoClient(string appId, string id, string jwt) {
++          dittoAuthDelegate = new DittoAuthDelegate(id, jwt);
+           ditto = new Ditto(identity);
+        }
+       ...
+   }
+}
+```
+
+### How can I show how many peers are connected?
+
+DItto offers an API that you can use to watch all of the peers and their
+respective transports that are connected to the current Ditto instance. Use the
+`ditto.presence` API to get real-time updates whenever Ditto's network topology
+changes. 
+
+
+### Bluetooth 
+
+1. Turn Use Location on
+1. Turn Bluetooth Scanning on
+1. Are permissions set correctly? See [installation](../installation).
+1. Go to your OS-level permissions for Bluetooth and clear the app permissions for your application.
+1. Delete the app, install it again, and open it. Does it ask for Bluetooth permissions?
+1. Android only: are you calling `ditto.refreshPermissions()`?
+
+### Apple Wireless Direct Link, P2P-Wifi, Wifi Aware 
+
+1. Are permissions set correctly? See [installation](../installation).
+1. Go to your OS-level permissions and clear the app permissions for your application.
+1. Delete the app, install it again, and open it. Does it ask for location permissions?
+1. If you are using a custom `TransportConfig`, make sure you have enabled all peer-to-peer transports using `enableAllPeerToPeer()`.
+
+### Local Area Network (LAN)
+
+1. Are permissions set correctly? See [installation](../installation).
+1. Are both devices connected to the same WiFi network?
+1. Check your router settings and see the [LAN troubleshooting guide](./mesh-network/supported-transports/#local-area-network).
+
+## Synchronization seems slow, or comes to a halt over time
+
+Ensure that you are only creating a fixed number of live queries, with a smaller amount of data. Do not use `findAll()`. 
+
+## App is using too much memory, why?
+
+Use profiling tools for your platform to better understand where the memory leak
+may be occurring. 
+
+A common issue we see in reactive apps is a failure to dispose of resources as
+conditions change. Your app could create a large accumulation of publishers that
+infinitely grow. Every liveQuery and subscription in ditto must be explicitly
+stopped using the `stop` or `cancel` API. See [snycing data](./concepts/syncing-data) for more information.
+
+## Debugging Blocked Transactions
 
 :::info 
 💡 This section only discusses blocked transactions on **native** platforms (e.g. iOS, Android, Windows, Linux). Ditto in web browsers operates sufficiently differently and isn’t covered here.
@@ -117,8 +184,6 @@ database during this time. This could manifest itself as one of many problems:
 A blocked write transaction can hint that something is wrong with the application code, or at a deeper level in Ditto. This page contains some tips & tricks to help understand the situation.
 
 The process of unblocking is automatic and you don’t need to write any code to handle this. However, you can drastically reduce the chance of blocking transactions by **making sure a device is only syncing the data it really needs**.
-
-## Diagnosing Blocked Transactions
 
 ### What is a “blocked” transaction?
 

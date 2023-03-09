@@ -1,11 +1,180 @@
 ---
 title: 'Schemas'
-sidebar_position: 6
+sidebar_position: 10
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import SnippetGroup from '@site/src/components/SnippetGroup';
+
+This section provides guidance about how to model your data inside Ditto's collection and document schemaless database.
+
+
+## Separating models for sync and views
+
+If you use a same model for sync and views, it may contain data you don't need
+to sync over transports, and the sync speed might get slower. We recommend to
+sync only the information that can be changed.
+
+```swift
+// 1. Model for views
+/// This contains all information that is not modified by users
+
+struct ViewPasseneger {
+    let id: String
+    let name: String
+    let seat: String
+    let vip: Bool
+    var status: Int // this can be modified by user
+    var crewNote: String // this can be modified by user
+}
+
+// 2. Model for sync
+/// This contains information that only modified by users
+/// Less data, faster to sync!
+
+struct DittoPassenger {
+    let id: String
+	  var status: Int // this can be modified by user
+	  var crewNote: String // this can be modified by user
+}
+```
+
+## Creating relationships
+
+Ditto does not support nesting documents or collections. If you need to create relationships
+between documents, use a foreign key relationship by referencing the `_id` of
+the document.
+
+### ⚠️ Bad pattern: Big documents
+
+Documents should not be larger than 250Kb. Any document that is larger than 5MB
+will not synchronize to other peers. Ditto over Bluetooth LE typically
+syncronizes documents at a maximum speed of 20 kB/second. This means that a
+single document that is 250kb large could take 10 seconds (in the best case
+scenario) to syncronize for the first time between devices.
+
+Ditto breaks a document into chunks, synchronize those parts over the mesh, and
+then reconstructs the document on the other side. Once the document has been
+reconstructed, it will be returned from the callback and can be rendered in the
+UI. This means that a user would see a loading spinner for 10 seconds. 
+
+```mermaid
+erDiagram
+    PEOPLE {
+        string _id
+        string name
+        int age
+        map[car] cars
+    }
+```
+
+
+
+
+```jsonc
+{
+  "name": "Susan",
+  "cars": {
+      "abc123": {
+        "make": "Hyundai",
+        "color": "red"
+      },
+      "def456": {
+        "make": "Jeep",
+        "color": "pink"
+      }
+      ...
+}
+```
+
+
+
+### 👍 Good pattern: Flat models
+
+Ditto syncs and queries documents based on a combination of the collection name and the document `_id`.
+Collections are a way to create an index to a set of related documents. You can
+create foreign relationships between documents by referencing the `_id`. For
+example, you may have an `orders` collection and a `customers` collection.
+
+```mermaid
+erDiagram
+    PEOPLE ||--o{ CARS : owns
+    PEOPLE {
+        string _id
+        string name
+        int age
+    }
+    CARS {
+        complex _id
+        string make
+        string color 
+    }
+```
+
+In the above example, each car is owned by a person. We represent this by using
+the `_id.owner` field to relate to the person's `_id`. 
+
+When Susan gets a car, you can create a new document in the `cars` collection
+with the foreign key relationship to the `people` collection.
+
+In the `people` collection:
+```jsonc
+{
+  "_id": "abc123",
+  "name": "Susan",
+  "age": 31
+}
+```
+
+In the `cars` collection.
+```jsonc
+{
+  "_id": {
+    "orderId": "def456",
+    "owner": "abc123" 
+  },
+  "make": "Hyundai",
+  "color": "red",
+}
+```
+
+:::info
+Remember, `_id` is immutable, so only use this pattern when you are
+dealing with static identifiers within your foreign key relationship. 
+:::
+
+#### Using a Write Transaction 
+
+When inserting a new car and a person at the same time, we wnat to use a a write
+transaction. This allows a device to perform atomic transactions across
+collections within a single database call. This means that both documents will be synchronized
+at the same time to other devices. 
+
+In our above example, this ensures that a peer will always see the person
+document for Susan if they have received the Hyundai document.
+
+<SnippetGroup name="write-transaction" />
+
+For more information about write transactions, see the section on [Writing -> Batching](./writing#batching-multiple-updates-in-a-single-transaction).
+
+## Using properties to define behavior
+
+There are situations where you want to show a document in a view only for some circumstances.
+In these cases, we recommend that the model have a boolean property that 
+determines if the received data should be shown in the UI. 
+
+```swift
+// Document content
+
+let note = ["text": text, "firstClassOnly": false]
+
+if !note.firstClassOnly {
+    // Show it on UI
+}
+```
+
+## Versioning
 
 Ditto's replication protocol is backwards-compatible and reliable. This means
 that eventually you will have the *"couch device problem"* (i.e., a device that
@@ -18,7 +187,7 @@ Synchronizing with this "couch device" could cause other devices to crash
 unexpectedly in production if precautions aren't taken in your application
 schema.
 
-## When do I version my documents?
+### When do I version my documents?
 
 Changing your schema is inevitable. To ensure reliability over time, you
 should create your own schema versioning pattern for each Ditto document.

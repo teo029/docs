@@ -12,7 +12,6 @@ that you can always write to your local database even if you are disconnected
 from the internet. Writes from all peers will synchronize and Ditto will resolve
 any conflicts.
 
-
 Ditto is a delta state CRDT, which means Ditto only replicates the data that has changed. This makes Ditto very fast.
 
 <video autoPlay loop muted>
@@ -34,10 +33,6 @@ immutable.  This means that you cannot change the `id` once you have created the
  
 <SnippetGroup name="upsert" />
 
-### Upserting with a specific `id`
-
-__Upserting__ also supports behavior where you would want to modify fields in a
-document, even if the document `id` does not not exist.  
 
 As an example, let's say we have a document in the `people` collection that looks like this:
 
@@ -73,7 +68,7 @@ Default Data can be thought of as "placeholder" data.  Default Data is useful wh
 1. Device A upserts a document `{"firstName": "Adam"}` at time = 0 after downloading from a central API.
 2. Device A updates the document to `{"firstName": "Max"}` at time = 1.
 3. Device B synchronizes with Device A receiving the document `{"firstName": "Max"}` at time = 2.
-4. Device B downloads the same document from the backend API `{"firstName": "Adam"}` and upserts at t = 3, which overwrites the previous change synced at time = 
+4. Device B downloads the same document from the backend API `{"firstName": "Adam"}` and upserts at t = 3, which overwrites the previous change synced at time = 1
 
 In the above example, both Device A and B want to preserve the change by Device A that occurred after downloading the common data. To do so, Ditto offers an additional parameter: isDefault. 
 
@@ -108,9 +103,52 @@ Updating an existing document is different depending on the type being updated
   name='update' 
 />
 
+### What is the difference between `upsert` and `update`?
+
+
+
+
+
+## Batching multiple updates in a single transaction
+
+A write transaction allows a device to perform multiple operations within a
+single database call, that will be synchronized at the same time to other
+devices. You can perform insert, update, remove or evict operations on multiple
+collections more efficiently using this method.
+
 :::warning
+You cannot combine `remove()` and `upsert()` on the same document in the same write transaction. This is because you cannot update a document that has been removed.
+:::
+
+<SnippetGroup name="write-transaction" />
+
+### Multi threading on updating list of contents
+
+When writing many documents to a small peer, you can start the transaction
+asynchronously to avoid blocking the main thread. For example, in Swift you can
+use `DispatchQueue.global`. The syntax is different for other languages but the
+concept is the same.
+
+```swift
+DispatchQueue.global(qos: .default).async {
+
+	ditto.store.write { transaction in
+
+		let scope = transaction.scoped(toCollectionNamed: "passengers-\(thisFlight)")
+
+    // Loop inside the transaction to avoid writing to database too frequently
+		self.passengers.forEach {
+			scope.upsert($0.dict)
+		}
+	}
+}
+```
+
+
 ## Blocked transactions
-You cannot start a write transaction within a write transaction. 
+
+:::warning
+You cannot start a write transaction within an update clause or a write transaction. 
 :::
 
 At any given time, there can be only one write transaction. Any subsequent
@@ -141,17 +179,3 @@ This might manifest itself in the logs as:
 If the transaction never unblocks and the log messages at `ERROR` level continue
 forever - you have a strong indication that there’s a deadlock and should
 investigate the application code.
-
-
-## Batching multiple updates in a single transaction
-
-A write transaction allows a device to perform multiple operations within a
-single database call, that will be synchronized at the same time to other
-devices. You can perform insert, update, remove or evict operations on multiple
-collections more efficiently using this method.
-
-:::warning
-You cannot combine `remove()` and `upsert()` on the same document in the same write transaction. This is because you cannot update a document that has been removed.
-:::
-
-<SnippetGroup name="write-transaction" />

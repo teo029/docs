@@ -5,6 +5,10 @@ sidebar_position: 14
 
 ## __General SDK__
 
+### Which Identity should I use to initialize Ditto?
+
+Use [Online Playground](./common/mesh-network/online-playground) for development and [Online With Authentication](./common/security/authentication) for production.
+
 ### How do Ditto enabled apps sync without internet connectivity?
 
 There are 3 ways for Ditto enabled apps to sync without connectivity.
@@ -97,7 +101,7 @@ Yes, Bluetooth Low Energy sync can operate at the same time as other Bluetooth d
 
 ### Can I sync data with devices that I am not directly connected to in the mesh?
 
-Yes. All participating devices must be subscribing to the same data query. For more information, look [here](../common/concepts/syncing-data#subscriptions)
+Yes. All participating devices must be subscribing to the same data query. For more information, look [here](./common/concepts/syncing-data#subscriptions)
 
 ### Can multiple apps share a database?
 
@@ -193,3 +197,10 @@ Ditto certificates are standard X.509 certificates. Each device has a keypair an
 
 ### Can Android and iOS devices sync with each other over WiFi Direct using Ditto?
 No. Android Wi-Fi Direct is, at least for now, only capable of syncing with other Android devices. Apple devices running iOS and macOS are capable of syncing over Apple Wireless Direct. These two transports are not compatible with each other. *However, other transports like Bluetooth Low Energy and Access Points will be able to sync with each other just fine.*
+
+## __API documentation__
+
+See the API reference on the sidebar to the left. You can also use your IDE's "Jump
+to definition" feature.
+
+![](../assets/jump_to_definition.png)

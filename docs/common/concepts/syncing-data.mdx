@@ -109,19 +109,86 @@ locally on the device. If each document is 50Kb, the device could
 replicate up to ~100 megabytes to the local database. 
 
 
+## How can I subscribe to multiple queries?
+
+Option A. Store them as multiple properties on a managed object that is kept in
+scope. If the subscription falls out of scope, it will become garbage collected and sync will stop.
+
+```swift
+var subscribeA: DittoSubscription? = nil
+var subscribeB: DittoSubscription? = nil
+
+var liveQueryA: DittoLiveQuery? = nil
+var liveQueryB: DittoLiveQuery? = nil
+```
+
+Option B: You could also store these objects as arrays. 
+
+```swift
+var subscriptions = [DittoSubscription]()
+var liveQueries = [DittoLiveQuery]()
+```
+
+## How can I stop to subscribing data?
+
+Ensure that you always `cancel` or `stop` on subscriptions when you no longer
+wish to subscribe to a query.
+
+```swift
+// subscription = nil // this does not work
+sub.cancel() // this is correct!
+```
+
+```swift
+// subscriptions.removeAll() Do not do this <- this will not work
+
+for sub in subscriptions {
+   sub.cancel()
+}
+
+subscriptions.removeAll() // After calling cancel, it is safe to remove them from the array.
+```
+
+
+
 ## Eviction
 
 When you subscribe to data that is relevant, you need to remove it from the
 local device once it is no longer relevant. You want to remove data from the
-local database _without_ deleting that data on other devices. 
-
-This operation is different than remove in that it only removes one or more
+local database _without_ deleting that data on other devices. This operation is different than remove in that it only removes one or more
 documents from the local storage and **does not sync the change to other
 devices.**
+
+You need to stop subscriptions before calling `evict()` because even if you
+reset the data in a device, the data will come back immediately if the
+subscription is alive. We recommend that you evict data once per day or once per
+week.
 
 <SnippetGroup
   name='evict' 
 />
+
+### How can I remove data?
+
+Consider using a "soft-delete" pattern in your application. You should use a
+field like `isDeleted: true` instead of calling `remove()`, and then evict that data. You can query and
+synchronize only the documents that not been marked archived. Using a
+soft-delete pattern, documents can be synced or updated again if necessary. 
+
+```swift
+struct Note {
+	let _id: String
+	var text: String
+	var isDeleted: Bool
+}
+
+// deleting data
+note.deleted = true
+
+// evicting old data once a week
+collection.find("isDeleted == true").evict()
+```
+
 
 ## Examples
 

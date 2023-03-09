@@ -1,0 +1,50 @@
+---
+title: 'Overview'
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import SnippetGroup from '@site/src/components/SnippetGroup';
+
+
+
+Each document in Ditto is a Map between a name (string) and a value. A value can be any other type supported in ditto, including Map. 
+
+## Example
+
+<SnippetGroup
+  name='upsert-datatypes' 
+/>
+
+
+## Keys
+
+Like JSON, Ditto only supports strings as keys in documents. That means attempting to insert a document like the following will throw an error:
+
+```jsonc
+{
+    1: "numeric_keys_are_invalid",
+    "this_part": "is_valid_though"
+}
+```
+
+## Nested documents
+
+Ditto does not support nesting documents. If you need to create relationships
+between documents, use a foreign key relationship by referencing the `_id` of
+the document. See [Creating Relationships Between Documents](../concepts/documents#creating-relationships-between-documents) for more information
+
+## Supported Types
+
+For more information on all supported types, please continue to the next sections.
+
+|         | Description                                                                | Merge Semantics                |
+| ----------- | -----------                                                                | ---                            |
+| [Register](../datamodel/register)    | A single primitive value (Number, String, Boolean, Binary File)            | Last Write Wins     |
+| [Counter](../datamodel/counter)     | A special number capable of preserving incrementing and decrementing semantics | The sum of all site's counters 
+| [Map](../datamodel/map)         | A dictionary of name->value mappings where name is a string and value is any of the other types | Updates merge     |
+| [Attachment](../datamodel/attachment)         | A blob that you want to sync between devices without querying, diffing, or merging | N/A |
+| [Array](../datamodel/array)         | A type of register that is represented as a list of values. | Last Write Wins |
+
+.
