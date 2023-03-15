@@ -7,7 +7,7 @@ sidebar_position: 2
 
 The Open API `swagger.json` spec can be found at the following URL:
 
-* `https://{app_id}.cloud.ditto.live/api/v2/swagger.json`
+* `https://{app_id}.cloud.ditto.live/api/v3/swagger.json`
 
 ## Usage
 
@@ -73,7 +73,7 @@ No. First, send a `find`, and then after a response, send an `write` request.
 
 To find this document you can use `/api/v3/store/findbyid`:
 ```
-curl --location --request POST 'https://{app_id}.cloud.ditto.live/api/v2/store/findbyid' \
+curl --location --request POST 'https://{app_id}.cloud.ditto.live/api/v3/store/findbyid' \
 --header 'X-DITTO-CLIENT-ID: AAAAAAAAAAAAAAAAAAAABQ==' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -96,7 +96,7 @@ type specified:
 
 Request:
 ```
-curl -X POST 'https://{app_id}.cloud.ditto.live/api/v2/store/find' \
+curl -X POST 'https://{app_id}.cloud.ditto.live/api/v3/store/find' \
   --header 'X-DITTO-CLIENT-ID: AAAAAAAAAAAAAAAAAAAABQ==' \
   --header 'Content-Type: application/json' \
   --data-raw '{
