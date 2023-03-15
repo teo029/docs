@@ -11,6 +11,15 @@ and writes based on these permissions.
 You can issue each certificiate [manually](../how-it-works/certificate-security) or with the [Online with
 Authentication identity](../security/authentication). 
 
+## Read and Write Permissions
+
+The two fundemental permissions that may be granted to a user in Ditto are `read` and `write`.
+These permission can be granted to all documents in an app, specific collections, or documents matching an `_id` query.
+The `read` permission grants the ability to access all fields of a document.
+The `write` permission alone grants the ability to create a document or fields of a document.
+To update or remove a document or its fields, a user must be granted *both* the `read` and `write` permissions.
+Without both permissions, a use can only create documents which do not already exist.
+
 ## Rejecting a user
 
 To reject a user from reading or writing at all, specify the JSON payload below.

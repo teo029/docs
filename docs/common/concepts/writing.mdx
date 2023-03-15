@@ -26,6 +26,10 @@ means that each device must assume that their operations are modifying
 documents that may already exist on some other device in the network. This is because it is
 possible that the current device just hasn't synchronized that document yet.
 
+:::warning
+Upserting requires both `read` and `write` permission for the target document(s).
+:::
+
 ### Creating a document
 
 If you do not supply an `id`, Ditto will create one for you and return it. Note that the `id` is
