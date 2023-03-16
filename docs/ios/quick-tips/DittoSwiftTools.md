@@ -65,9 +65,9 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 ### 2. Data Browser
 The Ditto Data Browser allows you to view all your collections, documents within each collection and the propeties/values of a document. With the Data Browser, you can observe any changes that are made to your collections and documents in real time.  
 
- <img src="Img/collections.png" alt="Collections Image" width="300"></img>  
-
- <img src="Img/document.png" alt="Document Image" width="300"></img>  
+ ![Collections Image](./Img/collections.png) 
+ 
+ ![Document Image](./Img/document.png)
  
 **Standalone App**
 If you are using the Data Browser as a standalone app, there is a button, `Start Subscriptions`, you must press in order to start syncing data.
@@ -101,8 +101,8 @@ present(vc, animated: true)
 ### 3. Export Logs
 Export Logs allows you to export a file of the logs from your applcation.  
 
- <img src="Img/exportLogs.png" alt="Export Logs Image" width="300"></img>  
-
+![Export Logs Image](./Img/exportLogs.png) 
+ 
 First, make sure the "DittoExportLogs" was added to your Target.
 Then, use `import DittoExportLogs` to import the Export Logs.
 
@@ -128,7 +128,7 @@ present(vc, animated: true)
 
 Disk Usage allows you to see Ditto's file space usage.  
 
- <img src="Img/diskUsage.png" alt="Disk Usage Image" width="300"></img>  
+![Disk Usage Image](./Img/diskUsage.png) 
 
 First, make sure the "DittoDiskUsage" was added to your Target.
 Then, use `import DittoDiskUsage` to import the Disk Usage.
