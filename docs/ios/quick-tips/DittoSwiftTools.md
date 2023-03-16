@@ -13,7 +13,7 @@ DittoSwiftTools are diagnostic tools for Ditto. You can view connected peers, ex
 The reccomended approach to use DittoSwiftTools in your project is using the Swift Package Manager.
 1. With your project open in Xcode go to File -> Add Packages, then search using  "github.com/getditto/DittoSwiftTools" to find the DittoSwiftTools package.  
 
- <img src="Img/addPackage.png" alt="Add Package Image"></img>  
+ ![addPackage Image](./Img/addPackage.png) 
  
 2. Select "Add Package"
 3. Select which DittoSwiftTools products you would like, then select "Add Package"
@@ -28,8 +28,8 @@ There are four targets in this package: Presence Viewer, Data Browser, Export Lo
 ### 1. Presence Viewer
 The Presence Viewer displays a mesh graph that allows you to see all connected peers within the mesh and the transport that each peer is using to make a connection.  
 
- <img src="Img/presenceViewer.png" alt="Presence Viewer Image" width="300"></img>  
-
+ ![presenceViewer Image](./Img/presenceViewer.png) 
+ 
 First, make sure the "DittoPresenceViewer" was added to your Target.
 Then, use `import DittoPresenceViewer` to import the Presence Viewer
 
