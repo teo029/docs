@@ -13,8 +13,8 @@ DittoSwiftTools are diagnostic tools for Ditto. You can view connected peers, ex
 The reccomended approach to use DittoSwiftTools in your project is using the Swift Package Manager.
 1. With your project open in Xcode go to File -> Add Packages, then search using  "github.com/getditto/DittoSwiftTools" to find the DittoSwiftTools package.  
 
- <img src="/Img/addPackage.png" alt="Add Package Image"></img>  
-
+ <img src="Img/addPackage.png" alt="Add Package Image"></img>  
+ 
 2. Select "Add Package"
 3. Select which DittoSwiftTools products you would like, then select "Add Package"
 
@@ -28,7 +28,7 @@ There are four targets in this package: Presence Viewer, Data Browser, Export Lo
 ### 1. Presence Viewer
 The Presence Viewer displays a mesh graph that allows you to see all connected peers within the mesh and the transport that each peer is using to make a connection.  
 
- <img src="/Img/presenceViewer.png" alt="Presence Viewer Image" width="300"></img>  
+ <img src="Img/presenceViewer.png" alt="Presence Viewer Image" width="300"></img>  
 
 First, make sure the "DittoPresenceViewer" was added to your Target.
 Then, use `import DittoPresenceViewer` to import the Presence Viewer
@@ -65,9 +65,9 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 ### 2. Data Browser
 The Ditto Data Browser allows you to view all your collections, documents within each collection and the propeties/values of a document. With the Data Browser, you can observe any changes that are made to your collections and documents in real time.  
 
- <img src="/Img/collections.png" alt="Collections Image" width="300"></img>  
+ <img src="Img/collections.png" alt="Collections Image" width="300"></img>  
 
- <img src="/Img/document.png" alt="Document Image" width="300"></img>  
+ <img src="Img/document.png" alt="Document Image" width="300"></img>  
  
 **Standalone App**
 If you are using the Data Browser as a standalone app, there is a button, `Start Subscriptions`, you must press in order to start syncing data.
@@ -101,7 +101,7 @@ present(vc, animated: true)
 ### 3. Export Logs
 Export Logs allows you to export a file of the logs from your applcation.  
 
- <img src="/Img/exportLogs.png" alt="Export Logs Image" width="300"></img>  
+ <img src="Img/exportLogs.png" alt="Export Logs Image" width="300"></img>  
 
 First, make sure the "DittoExportLogs" was added to your Target.
 Then, use `import DittoExportLogs` to import the Export Logs.
@@ -128,7 +128,7 @@ present(vc, animated: true)
 
 Disk Usage allows you to see Ditto's file space usage.  
 
- <img src="/Img/diskUsage.png" alt="Disk Usage Image" width="300"></img>  
+ <img src="Img/diskUsage.png" alt="Disk Usage Image" width="300"></img>  
 
 First, make sure the "DittoDiskUsage" was added to your Target.
 Then, use `import DittoDiskUsage` to import the Disk Usage.
