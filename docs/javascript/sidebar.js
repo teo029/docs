@@ -15,7 +15,7 @@ const common = require('../common/sidebar.js')
 module.exports = common({
   api: {
     type: "link",
-    label: "API Reference", 
-    href: downloadedChangelog.js.Ditto["3.0.1"].api_reference_docs_url,
+    label: "API Reference",
+    href: downloadedChangelog.js.Ditto.latest.api_reference_docs_url,
   }
 })
