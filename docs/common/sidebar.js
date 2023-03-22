@@ -83,6 +83,7 @@ module.exports = function (opts) {
       },
       opts.api,
       "common/v3",
+      "common/v4",
       "common/troubleshooting",
       "common/faq"
     ]
