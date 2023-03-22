@@ -130,9 +130,11 @@ snippet:
     tools:remove="android:maxSdkVersion" />
 ```
 
-> Note that you may need to add the `xmlns:tools="http://schemas.android.com/tools"`
-> namespace attribute to your app's root `<manifest>` tag as shown in the
-> `AndroidManifest.xml` example above.
+:::info
+Note that you may need to add the `xmlns:tools="http://schemas.android.com/tools"`
+namespace attribute to your app's root `<manifest>` tag as shown in the
+`AndroidManifest.xml` example above.
+:::
 
 This will configure your app's build to ignore the `android:maxSdkVersion`
 attribute in our SDK allowing the permission to be requested on any SDK version.

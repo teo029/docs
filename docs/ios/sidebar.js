@@ -18,13 +18,13 @@ module.exports = common({
     label: "API Reference",
     items: [{
       type: "link",
-      label: "Swift", 
-      href: downloadedChangelog.cocoa.DittoSwift["3.0.1"].api_reference_docs_url,
+      label: "Swift",
+      href: downloadedChangelog.cocoa.DittoSwift.latest.api_reference_docs_url,
     },
     {
       type: "link",
-      label: "ObjC", 
-      href: downloadedChangelog.cocoa.DittoObjC["3.0.1"].api_reference_docs_url,
+      label: "ObjC",
+      href: downloadedChangelog.cocoa.DittoObjC.latest.api_reference_docs_url,
     }]
   },
 })
