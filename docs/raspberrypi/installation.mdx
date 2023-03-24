@@ -3,27 +3,56 @@ title: "Installation"
 sidebar_position: 7
 ---
 
-# Linux (Raspberry Pi)
+# Linux & Raspberry Pi
+
+Ditto supports recent versions of Raspberry Pi and some other Linux-based systems
 
 ## Compatibility
 
-Ditto supports ARM processors on several platforms. Raspberry Pis have ARM CPUs. __These instructions are required to run on Linux regardless of the programming language.__
+| System                 | Support         | Notes    |
+| ---------------------- | --------------- | -------- |
+| Linux x86 64-bit       | Full support    |          |
+| Raspberry Pi 4B 32-bit | Full support    | Bullseye |
+| Raspberry Pi 3 32-bit  | Full support    | Bullseye |
+| Linux ARM 64-bit       | Coming soon     |          |
 
-## Bluetooth Low Energy
+
+| Linux SDK Language | Support      |
+| ------------------ | ------------ |
+| Node.js            | Full support |
+| Rust               | Full support |
+| C++                | Coming soon  |
+| Python             | Coming soon  |
+
+
+| Network Transport     | Linux Support     |
+| --------------------- | ----------------- |
+| Bluetooth Low Energy  | Full support      |
+| LAN / WLAN            | Full support      |
+| Websockets (Big Peer) | Full support      |
+| Apple AWDL            | No (iOS/Mac only) |
+| Wifi Aware            | No (Android only) |
+| Wifi Direct           | No                |
+
+
+# System preparation for happy Ditto operation
+
+## Bluetooth Low Energy - BlueZ
 
 If you would like to run Ditto on a Linux device and leverage Bluetooth Low
-Energy please follow the instructions. This applies to all SDKs, including 
-JavaScript (Node/Electron), C#, C++, etc. 
+Energy please follow these instructions. They apply to all SDKs, including 
+JavaScript (Node/Electron), C++, etc.
 
-Your device will need to install or update BlueZ with version 5.51 or higher. We've outlined a quick snippet set of instructions below to install BlueZ 5.61 as an example.
+Your device will need to install or update BlueZ with version 5.66 or higher.
+We've outlined a quick snippet set of instructions below to install BlueZ 5.66 as an example:
 
 ```
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get install libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev docutils-common -y
-wget http://www.kernel.org/pub/linux/bluetooth/bluez-5.61.tar.xz
-tar -xf bluez-5.61.tar.xz
-cd bluez-5.61
+wget http://www.kernel.org/pub/linux/bluetooth/bluez-5.66.tar.xz
+tar -xf bluez-5.66.tar.xz
+cd bluez-5.66
 ./configure
 make
 sudo make install
@@ -35,13 +64,11 @@ BlueZ 5.51 and above try to automatically read the battery status/service of
 devices when they connect. However, by default, iOS devices will prevent BlueZ
 services from reading the battery service. As a result, BlueZ connection
 attempts will cause iOS devices to show a pairing prompt constantly. Therefore,
-we will need to disable the battery service in BlueZ, use the following steps.
+we will need to disable the battery service in BlueZ, using the following steps.  
 
-1. Open the bluetooth service file. Depending on your system, it will be located
-either at `/usr/lib/systemd/system/bluetooth.service`, or
-`/etc/systemd/system/bluetooth.target.wants/bluetooth.service`. Use your
-favorite text editor like vim or nano to edit these files. In addition, you may
-need sudo permission to write to this file.
+1. With your favorite editor, open the bluetooth service file. On Raspberry Pi OS it's located: `/usr/lib/systemd/system/bluetooth.service`,
+on other versions it may be here: `/etc/systemd/system/bluetooth.target.wants/bluetooth.service`.  
+You will probably need to use su permission to write to this file.
 
 2. Find the line beginning with `ExecStart=` and add `-P battery` to the end. Now the line should look like this:
 
@@ -50,28 +77,82 @@ ExecStart=/usr/lib/bluetooth/bluetoothd -P battery
 ```
 
 3. Save the file.
-4. Run `systemctl daemon-reload` and `systemctl restart bluetooth` to apply the changes to the Bluetooth service
+4. Run `sudo systemctl daemon-reload` and `sudo systemctl restart bluetooth` to apply the changes to the Bluetooth service
 
 After that, BlueZ should be able to connect to iOS devices without prompting and
-Ditto Apps should be able to communicate over BLE between iOS and Linux.
+Ditto Apps should be able to communicate over BT-LE between iOS and Linux.
 
-## Cross-compiling with Rust
+### Run the following command to set BlueZ' support for multiple advertisements.
 
 ```
-cd my-app
-
-// If cross-compiling to original RPi-Zero-W
-rustup target add arm-unknown-linux-gnueabihf
-
-DITTOFFI_SEARCH_PATH=./ LIBDITTO_STATIC=0 cargo build [--target arm-unknown-linux-gnueabihf]
-
-LD_LIBRARY_PATH=./ ./target/release/my-app
+sudo setcap 'cap_net_raw,cap_net_admin+eip' `which hcitool` 
 ```
 
-## Example
+Your Linux system is now ready to install and run Ditto.
 
-See an example of a RaspberryPi-based moodlight, controlled over Bluetooth with Android and iPhone. 
+[See here](https://docs.ditto.live/javascript/installation) for Node.js SDK.  
+[See here](https://docs.ditto.live/rust/installation) for Rust SDK.  
+The Python and C++ SDKs are in development. If you would like early access, please [contact us](https://www.ditto.live/about/contact)
 
-[Source code on GitHub](https://github.com/getditto/moodlight)
+# Linux demo application (Node.js)
 
-![moodlight.gif](moodlight.gif)
+Demo Ditto syncing from your Raspberry Pi to your iOS or Android device, over Bluetooth LE or WLAN using our Tasks App:
+
+1) Make sure you've gone though the steps to prepare your system (see above). 
+2) Install Node Version Manager on your Pi.  
+
+```
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+```
+Now restart your terminal session so the changes can be picked up.
+
+3) Install the LTS version of Node.js (v18.13) on your Pi.  
+
+```
+nvm install 18.13
+```
+
+4) Clone the Linux Bluetooth branch of the samples app repo to your Pi.  
+
+```
+git clone --branch linux-bluetooth-node https://github.com/getditto/samples.git
+cd samples/tasks/nodejs/
+```
+Edit the index.ts file to include your own test App ID and Token (from our https://portal.ditto.live)
+
+5) Run the demo app!.  
+```
+npm install
+npm run build
+node index.js
+```
+
+You should see this in your Pi's console:
+```
+************* Commands *************
+--insert my new task
+   Inserts a task
+   Example: "--insert Get Milk"
+--toggle myTaskTd
+   Toggles the isComplete property to the opposite value
+   Example: "--toggle 1234abc"
+--delete myTaskTd
+   Deletes a task
+   Example: "--delete 1234abc"
+--list
+   List the current tasks
+--exit
+   Exits the program
+************* Commands *************
+Your command:
+```
+
+6) Create a new task and then check to see it being updated in our [handy data browser](https://portal.ditto.live).  
+You'll need to log in and view the test app ID you created earlier.  
+
+7) Now build and run the Tasks app for iOS or Android.  
+Be sure to reuse the same App ID and Token as you used on your Pi.  
+iOS / Android examples are [here](https://github.com/getditto/samples/tree/main/tasks).  
+
+### Next steps
+[Learn more about how Ditto works](https://docs.ditto.live/rust/common/concepts/overview)
