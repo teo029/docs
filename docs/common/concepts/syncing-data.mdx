@@ -48,9 +48,9 @@ all devices in the chain must be observing the same data, as shown below:
 
 ## Sync
 
-The small peer uses a selfish, query-based syncronization protocol. That means
+The small peer uses a selfish, query-based synchronization protocol. That means
 each device needs to explicitly tell other peers what data to sync using a query. Each peer also must explicitly opt-in to
-start syncronizing data. 
+start synchronizing data. 
 
 Preferably, you should tell ditto to start synchronizing early on in your application's life cycle like in your `AppDelegate.application(_:didFinishLaunchingWithOptions:)` or `Application.onCreate` method. Your application only needs to call this function once.
 
@@ -73,7 +73,7 @@ the data.
 <SnippetGroup name="subscribe" />
 
 * Call `.subscribe` after `ditto.startSync()` to synchronize and download real-time data from other peers.
-* To stop the `subscription`, call `subscrption.cancel()`.
+* To stop the `subscription`, call `subscription.cancel()`.
 
 ### Observe
 
@@ -294,7 +294,7 @@ self.ditto.collection("orders").upsert([
 ])
 ```
 
-An order could also become cancelled whlie it was unfilled. A cancelled order is
+An order could also become cancelled while it was unfilled. A cancelled order is
 based on the business logic -- for example, an order could be cancelled
 manually, or cancelled when the store closes, or because the order was placed
 more than 24 hours prior. 

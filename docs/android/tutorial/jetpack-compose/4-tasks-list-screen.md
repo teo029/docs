@@ -164,7 +164,7 @@ class TasksListScreenViewModel: ViewModel() {
 
 One of the features that we added to the `TaskRow` is to toggle the `isCompleted` flag of the document once a user clicks on the circle `Icon`. We will need to hook this functionality up to edit the Ditto document.
 
-This `toggle` function will take the `task`, find it by it's `_id` and switch it's `isCompleted` value to the opposite value.
+This `toggle` function will take the `task`, find it by its `_id` and switch its `isCompleted` value to the opposite value.
 
 ```kotlin title="TasksListScreenViewModel.kt"
 // ***

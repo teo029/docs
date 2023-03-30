@@ -75,7 +75,7 @@ const getHighlightDirectiveRegex = (
       return `(?:${start}\\s*(${HighlightDirectives.join("|")})\\s*${end})`;
     })
     .join("|");
-  // white space is allowed, but otherwise it should be on it's own line
+  // white space is allowed, but otherwise it should be on its own line
   return new RegExp(`^\\s*(?:${commentPattern})\\s*$`);
 };
 

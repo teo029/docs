@@ -50,9 +50,9 @@ the document.
 
 Documents should not be larger than 250Kb. Any document that is larger than 5MB
 will not synchronize to other peers. Ditto over Bluetooth LE typically
-syncronizes documents at a maximum speed of 20 kB/second. This means that a
+synchronizes documents at a maximum speed of 20 kB/second. This means that a
 single document that is 250kb large could take 10 seconds (in the best case
-scenario) to syncronize for the first time between devices.
+scenario) to synchronize for the first time between devices.
 
 Ditto breaks a document into chunks, synchronize those parts over the mesh, and
 then reconstructs the document on the other side. Once the document has been
@@ -146,7 +146,7 @@ dealing with static identifiers within your foreign key relationship.
 
 #### Using a Write Transaction 
 
-When inserting a new car and a person at the same time, we wnat to use a a write
+When inserting a new car and a person at the same time, we want to use a a write
 transaction. This allows a device to perform atomic transactions across
 collections within a single database call. This means that both documents will be synchronized
 at the same time to other devices. 

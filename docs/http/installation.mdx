@@ -67,7 +67,7 @@ portal in the "API Key" section.
 
 ![api_key_top.png](./api_key_top.png)
 
-You can give each API key it's own read and write permissions, scoped to particular collections or document ids. 
+You can give each API key its own read and write permissions, scoped to particular collections or document ids. 
 
 :::info
 Currently, you can only specify a permission query on the _id field of a document. Mutable properties are currently not supported. We are working on adding this feature.
@@ -162,7 +162,7 @@ insertion is non-blocking and so is very performant.
 Each HTTP API write request represents a distinct transaction which may be one
 or many operations (e.g., upsert or remove). Because Ditto is also a distributed
 system, `Transaction ID`s are used to represent the order in which transactions
-should be applied. Each write request returns it's associated `Transaction ID`. 
+should be applied. Each write request returns its associated `Transaction ID`. 
 
 GET requests can optionally specify a Transaction ID in an HTTP
 HEADER called `X-DITTO-TXN-ID`. This header will instruct the

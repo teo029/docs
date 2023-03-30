@@ -62,7 +62,7 @@ As we insert, update, and delete our tasks, we will update the Tasks collection.
 
 ```csharp
 DittoLiveQuery liveQuery = ditto.Store["tasks"].Find("!isDeleted").ObserveLocal((docs, _event) => {
-  // this will fire for all changes syncronized to the store.
+  // this will fire for all changes synchronized to the store.
 });
 ```
 

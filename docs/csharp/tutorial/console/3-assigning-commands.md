@@ -16,8 +16,8 @@ string taskBody = s.Replace("--insert ", "");
 ditto.Store["tasks"].Upsert(new Task(taskBody, false).ToDictionary());
 ```
 
-5. Check for a switch case for `--toggle`. We will parse out the string without `--toggle` and assume the user's input is a Task document's `_id`. We can then find the document by it's `_id` and call `.update`
-6. Check for a switch case for `--delete`. We will parse out the string without `--delete` and assume the user's input is a Task document's `_id`. We can then find the document by it's `_id` and call `.update`
+5. Check for a switch case for `--toggle`. We will parse out the string without `--toggle` and assume the user's input is a Task document's `_id`. We can then find the document by its `_id` and call `.update`
+6. Check for a switch case for `--delete`. We will parse out the string without `--delete` and assume the user's input is a Task document's `_id`. We can then find the document by its `_id` and call `.update`
 7. Finally we will add a command to look for `--list`, which will print out all the tasks that we've synced.
 
 ```csharp title="Program.cs"

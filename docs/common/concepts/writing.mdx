@@ -106,7 +106,7 @@ Updating an existing document is different depending on the type being updated
 ### What is the difference between `upsert` and `update`?
 
 * `upsert` will create updates to all fields even if those fields already exist. Every call to `upsert` will create new metadata for each field, even if the field has not changed on the local store.
-* `update` allows you to query the field locally and make changes to each individual field only if that field should change. This allows you to create fine-grained changes to a single document, or make batch changes to a set of documents. Using the `update` API means that you will only syncronize the minimum data necessary to enforce all peers to converge on one view of the data.
+* `update` allows you to query the field locally and make changes to each individual field only if that field should change. This allows you to create fine-grained changes to a single document, or make batch changes to a set of documents. Using the `update` API means that you will only synchronize the minimum data necessary to enforce all peers to converge on one view of the data.
 
 
 ## Batching multiple updates in a single transaction

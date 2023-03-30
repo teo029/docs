@@ -137,7 +137,7 @@ to agree to any changes made by other peers. This is done to ensure that no node
 has an advantage over another and that all nodes remain secure.  
 
 Therefore, even though peers in Ditto may have overlapping subscriptions, Ditto peers are only able
-to syncronize data directly from a peer that has the authority to write that
+to synchronize data directly from a peer that has the authority to write that
 document. In other words, small peers are only able to trust writes from other peers that have
 the authority to make those writes. They cannot trust each other as a source of
 data that they aren't authorized to write to, since they can't tell the
@@ -146,11 +146,11 @@ further hop.
 
 ### Read-only security model
 
-Because Ditto peers are only ableto syncronize data directly from a peer that has the authority to write that document, a read-only security model comes with some caveats. This section covers how to best implement this security model and the trade-offs that exist in peer-to-peer networks.
+Because Ditto peers are only able to synchronize data directly from a peer that has the authority to write that document, a read-only security model comes with some caveats. This section covers how to best implement this security model and the trade-offs that exist in peer-to-peer networks.
 
 Ditto provides a mechanism to specify which small peers can read documents in a collection *without permission to write*. This can be useful in situations where you have restrictive user roles, such as customer and employee. 
 
-To implement read-only documents, you should create restrictive write permissions that include the `userId` inside of the document `_id`.  Ditto ensures that only those authorized to create documents with a particular document `_id` are able to syncronize those documents in a trustworthy manner throughout the system. 
+To implement read-only documents, you should create restrictive write permissions that include the `userId` inside of the document `_id`.  Ditto ensures that only those authorized to create documents with a particular document `_id` are able to synchronize those documents in a trustworthy manner throughout the system. 
 
 ```
 {
@@ -248,7 +248,7 @@ A hacker attempts to write messages *pretending to be peer A* even though they a
 
 This is a credible attack vector, especially if Peer A represents an authority
 in the system, such as an administrative user. This design prevents a hacker
-from impersonating Peer A, because other peers will only syncronize documents
+from impersonating Peer A, because other peers will only synchronize documents
 from Peer A when they have a direct connection to Peer A, and can verify their certificate is valid.  
 :::
 

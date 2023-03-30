@@ -2,7 +2,7 @@
 title: '4 - Editing Tasks'
 ---
 
-Our final screen will be the `EditScreen` and it's ViewModel. The `EditScreen` will be in charge of 3 functions:
+Our final screen will be the `EditScreen` and its ViewModel. The `EditScreen` will be in charge of 3 functions:
 
 * Editing an existing `Task`
 * Creating a `Task` and inserting into the tasks collection

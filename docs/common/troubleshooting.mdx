@@ -248,7 +248,7 @@ This section presents a few examples blocked transaction scenarios, how they wou
 
 ### User blocks User
 
-An application might block it's own write transactions by performing multiple writes at the same time in different places. If one is slow (perhaps it does too much work, or perhaps it reaches out to external APIs, etc.) then the other write transactions will block until it finishes.
+An application might block its own write transactions by performing multiple writes at the same time in different places. If one is slow (perhaps it does too much work, or perhaps it reaches out to external APIs, etc.) then the other write transactions will block until it finishes.
 
 ```swift
 // Thread/Queue 1 (starts first):

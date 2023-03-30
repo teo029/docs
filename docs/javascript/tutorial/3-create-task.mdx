@@ -9,8 +9,8 @@ In the command line, the user can input a task they want to create using `readli
 
 1. `--insert`. We will parse the string without `--insert` and create a new task with the `body`.
 1. `--list`. We print out the tasks. Every time a task is changed, both locally and by other devices, the global `tasks` variable is updated from `observeLocal`
-1. `--toggle`. We will parse the string without --toggle and assume the user's input is a Task document's id. We can then find the document by it's id and call `.update`
-1. `--delete`. We will parse the string without --delete and assume the user's input is a Task document's id. We can then find the document by it's id and toggle the `isDeleted` property
+1. `--toggle`. We will parse the string without --toggle and assume the user's input is a Task document's id. We can then find the document by its id and call `.update`
+1. `--delete`. We will parse the string without --delete and assume the user's input is a Task document's id. We can then find the document by its id and toggle the `isDeleted` property
 
 ```js
 

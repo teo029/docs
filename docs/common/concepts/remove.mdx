@@ -19,7 +19,7 @@ this document _gone_ throughout your system.
 
 ### Remove by _id
 
-Removing by document _id is permanent. You can not create a new document with the
+Removing by document _id is permanent. You cannot create a new document with the
 same `_id` at a later time.
 
 <SnippetGroup
@@ -30,7 +30,7 @@ same `_id` at a later time.
 
 Consider using a "soft-delete" pattern in your application. You should use a
 field like `isArchived: true` instead of calling `remove()`. You can query and
-synchronize only the documents that not been marked archived. Using a
+synchronize only the documents that have not been marked archived. Using a
 soft-delete pattern, documents can be synced or updated again if necessary. 
 
 ```json
@@ -64,7 +64,7 @@ ditto.store.collection('cars').update((mutableDoc) => {
 
 Once you archive a document, you can delete it from the local device to free up
 disk space. This operation is different than remove in that it only removes one
-of more documents from the local on-disk storage.
+or more documents from the local on-disk storage.
 
 <SnippetGroup
   name='evict' 
