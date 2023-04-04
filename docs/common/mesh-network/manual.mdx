@@ -22,7 +22,11 @@ You can enable all peer to peer connections with `EnableAllPeerToPeer()`. You ca
 
 ## Sync to Ditto Cloud
 
-In order to sync to the Ditto Cloud you must use an online identity (onlinePlayground, onlineWithAuthentication). When setting up the online identity there is a boolean parameter called `enableDittoCloudSync` which allows you to enable/disable syncing with the Ditto Cloud. `enableDittoCloudSync` is set to true by default.
+The big peer generates certificates automatically for each small peer. A certificate involves an expiration date and AppID, among other credentials. Read more here about how it works.
+
+In order to sync with other devices, a peer must connect to the Big Peer at least once. To do this, you must use either [OnlinePlayground](./online-playground) or [OnlineWithAuthentication](../security/authentication). 
+
+We recommend using OnlinePlayground for development and OnlineWithAuthentication for production apps. If you only want to use the Big Peer for authentication without syncing to the cloud, you can use `enableDittoCloudSync=false`.  `enableDittoCloudSync` is set to true by default.
 
 <SnippetGroup name="online-playground-cloudSync" />
 
