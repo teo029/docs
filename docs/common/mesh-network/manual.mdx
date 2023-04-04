@@ -108,7 +108,11 @@ In the example below, we know of two other Ditto peers located on:
 
 <SnippetGroup name="network-remote-ditto" />
 
-Feel free to add as many known remote `host:port` strings.
+Feel free to add as many known remote `host:port` strings. 
+
+You can also configure your Ditto instance to connect to a websocket, which is useful to connect to one or more big peers or authentication instances.
+
+<SnippetGroup name="websocket-connect" />
 
 ## Listening for Connections on a Specific Port
 
@@ -130,10 +134,6 @@ port is accessible. Depending on your deployment _be sure to check that external
 connections can reach the port_ that you have specified in your configuration.
 You may need to set up port forwarding if external ports map differently to your
 host.
-
-You can also configure your Ditto instance to connect to a websocket
-
-<SnippetGroup name="websocket-connect" />
 
 
 ## Combining Multiple Transports
