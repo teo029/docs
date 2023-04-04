@@ -88,6 +88,29 @@ updates. [Learn more about how to create queries](./querying)
 * The callback will get called with all local changes that fit the query. 
 * The callback will get called for each sync or write transaction.
 
+### LiveQueryEvent
+
+:::info 
+Reactive frameworks like React, Jetpack Compose, and SwiftUI are designed to
+make UI development more efficient and help programmers build responsive
+applications with minimal effort. They achieve this by abstracting the process
+of updating the UI and providing optimized solutions for managing state and
+rendering components. This eliminates the need for programmers to manually
+implement a diffing algorithm. 
+:::
+
+
+If you are not using a reactive framework such as React, Jetpack Compose, or SwiftUI, you might
+benefit from reacting to changes from Ditto's `LiveQueryEvent` object. A LiveQuery
+callback has two arguments: `docs` and `event`. The `event` argument allows you
+to identify which documents have changed in the database. There are two types of
+events:
+
+* `Initial`: The first event that will be delivered and it will only be delivered once.
+* `Update`: This event will be delivered each time the results of the provided query change. It contains information about the set of documents that previously matched the query before the update, along with information about what documents have been inserted, deleted, updated, or moved, as part of the set of matching documents.
+
+For more information, see `LiveQueryEvent` in the Ditto API reference for your language.
+
 ### Sync only relevant documents
 
 To reduce memory and disk usage over time, *ONLY* sync documents that are relevant for a given device at a
