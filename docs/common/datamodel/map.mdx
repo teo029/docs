@@ -21,35 +21,6 @@ properties and values. The values can be registers, counters, arrays, or maps.
 A map is useful when you want to make a list of items and update items over time
 within a document. 
 
-### A list of objects
-
-For example, we want to render the inspections that were performed on a car
-in a list view. You can model that list as a map object inside
-of your document.
-
-```json
-{
-  "_id": "abc123",
-  "color": "red",
-  "make": "Toyota",
-  "mileage": 160000,
-  "inspections": {
-    "def456": {
-      "date": "2019-10-03",
-      "result": 1,
-      "mileage": 140000
-    } ,
-    "ghj789": {
-      "date": "2021-02-03",
-      "result": 1,
-      "mileage": 150000
-    } 
-  }
-}
-```
-
-Maps are queriable using the [`find`](../concepts/querying) API as part of the Ditto query language.
-
 ### Updating fields concurrently
 
 An update to any field in a map is sent independent of other changes within a
@@ -95,6 +66,36 @@ When both devices synchronize, both updates will merge. You will see the mileage
   "make": "Toyota",
   "mileage": 160200,
   "smogReports": "<very long json blob>"
+}
+```
+
+### Change history between concurrent devices
+
+What would be the best approach when two devices make changes to the same field on the same document while both are offline, and then connect again. If you use a Register, the CRDT gives priority to the “latest” change, because Registers are always Last Writer Wins. But if you would like to audit these conflicts, you can use a Map.
+
+For example, say we want to render the inspections performed on a car in a list view. We provide a field insepctions and give each writer an ID as the field. For example, say you have two peers: peer 1 has a unique ID of `ghj789` and peer 2 has an ID `def456`.
+
+You can model that list of operations as a map object inside of your document. The UI can then choose how to render these changes based on whatever information each peer has provided in the map.
+
+
+```json
+{
+  "_id": "abc123",
+  "color": "red",
+  "make": "Toyota",
+  "mileage": 160000,
+  "inspections": {
+    "def456": {
+      "date": "2019-10-03",
+      "result": 1,
+      "mileage": 140000
+    } ,
+    "ghj789": {
+      "date": "2021-02-03",
+      "result": 1,
+      "mileage": 150000
+    } 
+  }
 }
 ```
 
