@@ -59,7 +59,7 @@ Ditto can be used in Airplane Mode. If Bluetooth or WiFi is manually toggled on 
 
 ### How fast is the sync?
 
-* WiFi: the full speed of your connection, typically 1 gigabyte of data in times as low as 8 seconds. 
+* WiFi: the full speed of your connection, typically 1 gigabyte of data in times as low as 8 seconds.
 * WiFi Direct: similar to WiFi speeds
 * Bluetooth LE: typically 20 kB/second (however, if you’re using a device that is below Android 10, then Ditto will use BLE GATT which is only 4 kB/second.)
 * The Big Peer: 40k transactions per second (25k write txns + 15k reads)
@@ -79,7 +79,7 @@ Bluetooth Classic is an older mode used for accessories like headphones. It requ
 
 Bluetooth Low Energy is a newer mode of Bluetooth that requires less power and does not require user interaction to connect to another device. All Ditto Bluetooth sync uses this mode.
 
-For a more detailed explanation, please look to our blog post [What's the Difference Between Bluetooth Classic and Bluetooth Low Energy?](https://ditto.live/blog/posts/whats-the-difference-between-btclassic-and-ble)
+For a more detailed explanation, please look to our blog post [What's the Difference Between Bluetooth Classic and Bluetooth Low Energy?](https://ditto.live/blog/whats-the-difference-between-btclassic-and-ble)
 
 ### Does the SDK require Bluetooth pairing?
 
@@ -113,7 +113,7 @@ Yes. The Ditto SDK provides `startSync()` and `stopSync()` methods that will ena
 
 ### Will the app sync in the background?
 
-iOS offers best-effort background sync provided Bluetooth LE is enabled and the Bluetooth central and peripheral background modes are enabled. Android can sync in the background over WiFi. 
+iOS offers best-effort background sync provided Bluetooth LE is enabled and the Bluetooth central and peripheral background modes are enabled. Android can sync in the background over WiFi.
 
 ### Does the sync happen even when the device is locked?
 
@@ -155,7 +155,7 @@ If a device is disconnected, this will be reflected through the `observePeers()`
 
 ### Can I specify the connection type?
 
-You can specify which transport types to enable, e.g. Bluetooth only, WiFi only, or everything. Ditto will use its own algorithms to decide which devices to connect to and which modes to use. Ditto always prioritizes the fastest connection that is available, and will optimistically upgrade to a faster connection whenever possible. 
+You can specify which transport types to enable, e.g. Bluetooth only, WiFi only, or everything. Ditto will use its own algorithms to decide which devices to connect to and which modes to use. Ditto always prioritizes the fastest connection that is available, and will optimistically upgrade to a faster connection whenever possible.
 
 ### Can you keep track of offline devices in your team?
 
