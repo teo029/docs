@@ -579,44 +579,18 @@ The document cache takes data from the mesh clients and puts it on the log as tr
 
 As clients disconnect, if any data is no longer required in the cache, it is eventually garbage collected away.
 
-## What Next?
-
-Big Peer is approaching beta. Some customers are already putting production workloads into Big Peer. Big Peer is far from done. We'd like to focus on stability, performance, and features. As well as those mentioned above (gossip, sophisticated resourcing/partitioning) we have the following in progress.
-
 ### CDC
 
-Completing the cycle of data in Big Peer is CDC ([Change Data Capture](https://en.wikipedia.org/wiki/Change_data_capture)). Work in progress where each transaction produces a Change Data Message containing the type of change (e.g., insert, delete, update) and the details of the change. CDC is a way for customer to react to data changes that occur from the mesh or elsewhere, or even to keep external legacy databases in sync with Big Peer.
+Completing the cycle of data in Big Peer is CDC ([Change Data Capture](https://en.wikipedia.org/wiki/Change_data_capture)). Each transaction produces a Change Data Message containing the type of change (e.g., insert, delete, update) and the details of the change. CDC is a way for customer to react to data changes that occur from the mesh or elsewhere, or even to keep external legacy databases in sync with Big Peer.
 
 Data from CDC is available from Kafka. Developers can [register Kafka consumers](../guides/kafka/intro) where Big Peer will deliver data change events that match a defined query - similar to how Small Peers can `observe` queries to react to data changes.
 
 We also provide webhooks to enable delivery of data within Big Peer into other systems or to build server-side logic that reacts to data change events - such as performing data aggregations that write back into Big Peer or triggering an email to a user based off an event from a Small Peer. These data change events fit into "serverless" patterns and will work with any "functions-as-a-service" (FaaS) systems, such as AWS Lambda or others.
 
-Care is being taken to ensure the delivery of these events are reliable. Endpoints will be able to persist a unique marker that corresponds to the event, and later restart events from that same marker onward so that events are not missed during periods of interruption.
-
-### Time Series
-
-In addition to storing mutable Documents backed by CRDTs, Big Peer recently added support for immutable Time Series data. We have a basic Time Series API in Big Peer and we're adding Time Series to the Small Peer. Developers can utilize these APIs to match data in their application, such as blending Documents from a companion mobile app alongside sensor Time Series data produced via an embedded or "IoT" device. Watch this space.
+Care is being taken to ensure the delivery of these events are reliable. Endpoints are able to persist a unique marker that corresponds to the event, and later restart events from that same marker onward so that events are not missed during periods of interruption.
 
 ### HTTP API
 
 For more information on how to use the HTTP API, see the [HTTP documentation](https://docs.ditto.live/http/installation).
 
-### Eventual Consistency Mode
 
-Multi-model databases are becoming more popular. We'd like to add an "Eventual Consistency Mode" to Big Peer, where the overhead of Causal Consistency is not needed.
-
-### Improved Queries and Indexing
-
-We'd like to expand the types of queries offered, such as cross-collection joins, in addition, to offer flexible indexing for improved query performance.
-
-### Summary
-
-Big Peer is multi-tenant, distributed, causally consistent CRDT database,
-built by Ditto, and operated by Ditto. When creating Big Peer our view
-was always towards which architectural fundamentals give us the
-primitives we need to support the properties we want.
-
-Big Peer is under active development. We expect to expand and iterate and to
-optimize. Big Peer has been written as software that Ditto can ship and support
-customers deploying and running themselves, running it as a service at Ditto is
-only the first part of the story.
