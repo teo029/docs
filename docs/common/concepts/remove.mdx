@@ -15,12 +15,9 @@ Removing documents will remove documents from the local device _and other
 peers_. Your application code should consider `remove`  calls to be destructive.
 In other words, if you call remove on document, your application should consider
 this document _gone_ throughout your system.
-::::
 
-### Remove by _id
-
-Removing by document _id is permanent. You cannot create a new document with the
-same `_id` at a later time.
+In the v4 version of Ditto, any device can “undo” the remove by calling upsert on the document with `_id=abc123` again.
+:::
 
 <SnippetGroup
   name='remove-id' 
