@@ -11,7 +11,7 @@ import SnippetGroup from '@site/src/components/SnippetGroup';
 ## Do not deploy to the app store
 Shared key is not suitable for apps deployed to the public app store, because the key could be reverse-engineered. Shared key is more appropriate for an enterprise application run on centrally managed devices that do not connect to the Internet.
 
-If you need to synchronize data over the Internet with the Big Peer, [use Online With Authentication instead](./authentication).
+If you need to synchronize data over the Internet with the Big Peer and/or deploy to the app store, [use Online With Authentication instead](./authentication).
 :::
 
 
@@ -20,8 +20,7 @@ and devices are trusted. For example, this could be appropriate for an
 enterprise application run on centrally managed devices. In this mode, every
 device knows the same secret key, and uses this to validate incoming
 connections. The benefit of this approach is that distinct certificates do not
-have to be distributed to every device, simplifying the deployment.
-
+have to be distributed to every device, simplifying the deployment. However, the downside is that devices will always have access to data. A compromised device can read and re-distribute the key, and there is no method to unauthorize that key in the future.
 
 Small Peers in this mode use a `SharedKey` identity type. The secret key must be provided as a
 String when initializing the `DittoIdentity` on each peer. This key should be securely and randomly generated and Ditto
