@@ -10,36 +10,6 @@ import SnippetGroup from '@site/src/components/SnippetGroup';
 This section provides guidance about how to model your data inside Ditto's collection and document schemaless database.
 
 
-## Separating models for sync and views
-
-If you use a same model for sync and views, it may contain data you don't need
-to sync over transports, and the sync speed might get slower. We recommend to
-sync only the information that can be changed.
-
-```swift
-// 1. Model for views
-/// This contains all information that is not modified by users
-
-struct ViewPasseneger {
-    let id: String
-    let name: String
-    let seat: String
-    let vip: Bool
-    var status: Int // this can be modified by user
-    var crewNote: String // this can be modified by user
-}
-
-// 2. Model for sync
-/// This contains information that only modified by users
-/// Less data, faster to sync!
-
-struct DittoPassenger {
-    let id: String
-	  var status: Int // this can be modified by user
-	  var crewNote: String // this can be modified by user
-}
-```
-
 ## Creating relationships
 
 Ditto does not support nesting documents or collections. If you need to create relationships
