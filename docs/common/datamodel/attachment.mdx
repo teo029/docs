@@ -3,9 +3,9 @@ title: 'Attachment'
 sidebar_position: 4
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import SnippetGroup from '@site/src/components/SnippetGroup';
+import Tabs from '@theme/Tabs';  
+import TabItem from '@theme/TabItem';  
+import SnippetGroup from '@site/src/components/SnippetGroup';  
 
 If you have a large amount of binary data, or perhaps just a large file, that
 you want to sync between devices then instead of inserting this into a document
@@ -15,8 +15,37 @@ Attachments do not get synced between devices by default, even if they are part
 of a document that is being synced between devices. This is because they could
 be very large files that a given device doesn't need. Instead an attachment must
 be explicitly fetched using an attachment token that will be present in the
-document that the attachment is linked to.
+document that the attachment is linked to.  
 
-<SnippetGroup
-  name='attachment' 
-/>
+Imagine a scenario where we have a collection of `User`s, and where each user may 
+optionally have an avatar image as an attachment to the `User` document.  
+<SnippetGroup name='attachment-user'/>
+  
+
+Somewhere in your app you would have a function that adds an image as an attachment
+to the `User` document, perhaps passing the `User` instance and a `URL.path` to the 
+image location. Here, we call `newAttachment()` on our collection which returns 
+a `DittoAttachment` object. Then we `set()` the attachment object on the document.  
+<SnippetGroup name='attachment-add-attachment-func'/>  
+
+Note that on the `User` model, the `avatarToken` variable is of type `DittoAttachmentToken`, 
+yet we call the `set()` function with a `DittoAttachment` object. This can be confusing. 
+The `set()` function, called with the attachment on a `DittoMutableDocumentPath` instance, 
+causes the data bytes of the attachment at the given file location to be stored in the 
+Ditto database, along with the metatdata; the document property is initialized with a 
+`DittoAttachmentToken` with which we will later fetch the attachment data asnynchronously 
+from the p2p mesh, or from local storage if it has already been fetched.
+  
+  
+Later, somewhere else in the app: find the document, fetch the attachment, and use 
+the image. Optionally, the `progress` event value may be used, for example to update 
+a progress view.
+<SnippetGroup name='attachment-fetch'/>  
+
+  
+In this example, the `DittoCollection.fetchAttachment(token:deliverOn:onFetchEvent:)` 
+has been wrapped in an `ImageAttachmentFetcher` struct for convenience. It is called 
+with a progress handling closure for updating a progress view, and a completion handler 
+for handling the fetched image. Note that a `FetchAttachmentPublisher` is also available.  
+<SnippetGroup name='attachment-fetcher-struct'/>
+
