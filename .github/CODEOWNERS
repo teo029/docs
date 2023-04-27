@@ -3,15 +3,15 @@
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 #
 
-/docs/http/ @kw7oe
+/docs/http/ @kw7oe @rodoyle @P0st-N0-B1lls
 /docs/javascript/ @okdistribute
 /docs/csharp/ @phatblat
-/docs/raspberrypi/ @okdistribute
-/docs/android/ @abunur
+/docs/linux/ @okdistribute @rodoyle @thombles
+/docs/android/ @abunur @phatblat
 /docs/cpp/ @okdistribute
-/docs/rust/ @okdistribute
-/docs/ios/ @phatblat
+/docs/rust/ @rodoyle @kw7oe
+/docs/ios/ @magicwave
 /docs/common/security/ @thombles
-/docs/common/ @okdistribute
+/docs/common/ @okdistribute @contenuto
 
 

@@ -7,6 +7,10 @@ sidebar_position: 7
 
 Ditto supports recent versions of Raspberry Pi and some other Linux-based systems
 
+These instructions are required to run Ditto on Linux regardless of the programming language. This applies to all SDKs, including 
+JavaScript (Node/Electron), C#, C++, etc. 
+
+
 ## Compatibility
 
 | System                 | Support         | Notes    |
@@ -40,8 +44,7 @@ Ditto supports recent versions of Raspberry Pi and some other Linux-based system
 ## Bluetooth Low Energy - BlueZ
 
 If you would like to run Ditto on a Linux device and leverage Bluetooth Low
-Energy please follow these instructions. They apply to all SDKs, including 
-JavaScript (Node/Electron), C++, etc.
+Energy please follow the instructions. 
 
 Your device will need to install or update BlueZ with version 5.66 or higher.
 We've outlined a quick snippet set of instructions below to install BlueZ 5.66 as an example:
@@ -112,13 +115,14 @@ Now restart your terminal session so the changes can be picked up.
 nvm install 18.13
 ```
 
-4) Clone the Linux Bluetooth branch of the samples app repo to your Pi.  
+4) Clone the samples app repo to your machine.  
 
 ```
-git clone --branch linux-bluetooth-node https://github.com/getditto/samples.git
+git clone https://github.com/getditto/samples.git
 cd samples/tasks/nodejs/
 ```
-Edit the index.ts file to include your own test App ID and Token (from our https://portal.ditto.live)
+
+Edit the index.ts file to include your own test App ID and Token from https://portal.ditto.live
 
 5) Run the demo app!.  
 ```

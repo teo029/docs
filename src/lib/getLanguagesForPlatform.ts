@@ -24,7 +24,7 @@ export default (platform: string) => {
         {label: 'Objective-C', value: 'objc'},
       ]
       break;
-    case 'raspberrypi':
+    case 'linux':
       languages = [
         {label: 'NodeJS', value: 'javascript'},
         {label: 'C++', value: 'cpp'},

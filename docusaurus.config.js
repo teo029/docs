@@ -5,7 +5,7 @@ const path = require("path");
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 
 const languages = [
-   'csharp', "http", "javascript", "android", "ios", "rust", "cpp", "raspberrypi"
+   'csharp', "http", "javascript", "android", "ios", "rust", "cpp", "linux"
 ]
 
 const plugins = languages.map(id => [

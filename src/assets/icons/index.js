@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { CPlusPlus as CPP , Android, Apple, Python } from '@styled-icons/boxicons-logos';
 import { Curl as HttpIcon } from '@styled-icons/simple-icons';
 import { Dotnet , Xamarin } from '@styled-icons/simple-icons';
-import { Rust, RaspberryPi } from '@styled-icons/fa-brands';
+import { Rust, Linux } from '@styled-icons/fa-brands';
 
 const AndroidIcon = ({ className, ...props }) => {
   return <Android className={clsx('text-[#3ddb85]', className)} {...props} />;
@@ -23,8 +23,8 @@ const RustIcon = ({ className, ...props }) => {
   return <Rust className={clsx('text-[black]', className)} {...props} />;
 };
 
-const PiIcon = ({ className, ...props }) => {
-  return <RaspberryPi className={clsx('text-[#cc2555]', className)} {...props} />;
+const LinuxIcon = ({ className, ...props }) => {
+  return <Linux className={clsx('text-[#f5c11c]', className)} {...props} />;
 };
 
 const XamarinIcon = ({ className, ...props }) => {
@@ -41,7 +41,7 @@ const DotNetIcon = ({ className, ...props }) => {
 
 
 export { JSIcon } from './JSIcon';
-export { RustIcon, XamarinIcon, AndroidIcon, CPlusPlus, AppleIcon, HttpIcon, DotNetIcon, PiIcon, Python};
+export { RustIcon, XamarinIcon, AndroidIcon, CPlusPlus, AppleIcon, HttpIcon, DotNetIcon, LinuxIcon, Python};
 
 export { KotlinIcon } from './KotlinIcon';
 export { SwiftIcon } from './SwiftIcon';

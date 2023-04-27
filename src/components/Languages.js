@@ -5,7 +5,7 @@ import {
   HttpIcon,
   AppleIcon,
   RustIcon,
-  PiIcon,
+  LinuxIcon,
   Python,
   CPlusPlus
 } from '../assets/icons';
@@ -37,9 +37,9 @@ export default [
     icon: HttpIcon,
   },
   {
-    id: 'raspberrypi',
-    name: 'RaspberryPi',
-    icon: PiIcon,
+    id: 'linux',
+    name: 'Linux',
+    icon: LinuxIcon,
   },
   {
     id: 'rust',

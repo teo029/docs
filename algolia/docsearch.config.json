@@ -12,7 +12,7 @@
       "android/common/.*$",
       "csharp/common/.*$",
       "http/common/.*$",
-      "raspberrypi/common/.*$",
+      "linux/common/.*$",
       "cpp/common/.*$",
       "javascript/common/.*$",
       "rust/common/.*$"
