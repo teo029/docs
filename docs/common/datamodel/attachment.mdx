@@ -3,12 +3,13 @@ title: 'Attachment'
 sidebar_position: 4
 ---
 
-import Tabs from '@theme/Tabs';  
-import TabItem from '@theme/TabItem';  
-import SnippetGroup from '@site/src/components/SnippetGroup';  
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import SnippetGroup from '@site/src/components/SnippetGroup';
 
 If you want to sync a large amount of binary data, such as a file, that you want to sync between 
-devices, then you should use the attachments feature. Any piece of data larger than 250kb should be shared using this `Attachment` type.
+devices, then you should use the attachments feature. Any piece of data larger than 250kb should be 
+shared using this `Attachment` type.
 
 Attachments do not get synced between devices by default, even if they are part of a document that 
 is being synced between devices. This is because they could be very large files that a given device 
@@ -20,7 +21,9 @@ be present in the document the attachment is linked to.
 Imagine a scenario where we have a collection of `User`s, and where each user may optionally have an 
 avatar image as an attachment to the `User` document. The attachment can be referenced with a token, 
 called a `DittoAttachmentToken` type, like so. We will make it optional in this example, because in 
-our application it is not required to upload an avatar image:
+our application it is not required to upload an avatar image.  
+(See an attachment example in the 
+[chat demo app](https://github.com/getditto/demoapp-chat/blob/main/iOS/DittoChat/Data/DittoService.swift#L340-L350)) 
 
 <SnippetGroup name='attachment-user'/>
 
@@ -49,7 +52,7 @@ already been fetched.
 Peers can now find the document, fetch the attachment, and use the image.  Optionally, the 
 `progress` event value may be used to update a progress view. In this example, the 
 `DittoCollection.fetchAttachment(token:deliverOn:onFetchEvent:)` has been wrapped in an 
-`ImageAttachmentFetcher` struct for convenience.
+`ImageAttachmentFetcher` struct for convenience.  
 
 <SnippetGroup name='attachment-fetcher-struct'/>
 
