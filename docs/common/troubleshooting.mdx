@@ -136,6 +136,12 @@ Application-level subscriptions will be listed by collection. For exmaple, for a
 "tasks": {Query { expr: "isDeleted == false", order_by: [], limit: None, offset: None }}} 
 ```
 
+When a subsription changes, you will see the following:
+
+```
+Application: notifying a local subscription change
+```
+
 ### Writes
 
 For each write that is made to the local database, you will see a message like 
@@ -178,9 +184,22 @@ This indicates that the update file sync process has been successful, and the lo
 
 ### Troubleshooting
 
-#### Did you copy your playground token and App ID correctly? 
+#### Did you copy your AppId and credentials correctly? 
 
-If the app_id is not the same on all devices, you should do the following:
+If your AppId is wrong, you will see the following line:
+
+```
+AuthClient: failed to get JSON for auth response; e = reqwest::Error { kind: Decode, source: Error("expected value", line: 1, column: 1) 
+```
+
+If your playground token is wrong, you will see:
+
+```
+AuthClient: No valid Web token present. Can not request certificate.
+AuthClient: failed to obtain a certificate ValueNotFound
+```
+
+See if the following fixes your issue:
 
 1. Login to the [Portal](https://portal.ditto.live) 
 1. Go to your App.
@@ -252,13 +271,11 @@ implemented according to the [sample
 code](./security/authentication#creating-your-client).
 1. Do not create subscriptions inside the callbacks. These callbacks are only
 called on first launch and when the certificate expires.
-1. Keep a strong reference to the AuthClient for the duration of the 
-
+1. Keep a strong reference to the AuthClient for the duration of the Ditto object, otherwise the auth handler will become garbage collected at an inappropriate time.
 
 #### Verify that your webhook provider name is [correctly copied in the Ditto portal](./security/authentication#login).
 
 The provider name given to the Ditto Client must match a provider name in the Portal (e.g., `my-auth`).
-
 
 ![Sample Authentication Webhook Endpoint in the Portal](./security/sample-authentication-webhook-endpoint.png)
 
