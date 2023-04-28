@@ -16,14 +16,16 @@ is being synced between devices. This is because they could be very large files 
 doesn't need. Instead, an attachment must be explicitly fetched using an attachment token that will 
 be present in the document the attachment is linked to.  
 
+
 ### Example
 
 Imagine a scenario where we have a collection of `User`s, and where each user may optionally have an 
 avatar image as an attachment to the `User` document. The attachment can be referenced with a token, 
 called a `DittoAttachmentToken` type, like so. We will make it optional in this example, because in 
 our application it is not required to upload an avatar image.  
-(See an attachment example in the 
-[chat demo app](https://github.com/getditto/demoapp-chat/blob/main/iOS/DittoChat/Data/DittoService.swift#L340-L350)) 
+
+See the full example for using attachments in the 
+[chat demo app for iOS](https://github.com/getditto/demoapp-chat/blob/main/iOS/DittoChat/Data/DittoService.swift#L340-L350).
 
 <SnippetGroup name='attachment-user'/>
 
@@ -64,8 +66,6 @@ duration of the asynchronous fetch operation, shown here with a property. If the
 of scope during the fetch operation the fetch will be silently aborted.  
 
 <SnippetGroup name='attachment-fetch'/>  
-
-
 
 ### Using with Combine
 
