@@ -1,23 +1,186 @@
+---
+title: 'Troubleshooting'
+---
+
+import SnippetGroup from '@site/src/components/SnippetGroup';
+
 # Troubleshooting
 
-## Android and iOS apps are not syncing, why?
+If you are having a problem with Ditto, first follow this guide.
 
-If you are having trouble synchronizing devices in Ditto, follow this guide.
+## Reading the logs
 
-If you continue to have problems, please email us at
-[support@ditto.live](mailto:support@ditto.live) or [login to your Ditto
-account](https://portal.ditto.live) to chat with the support bot in the lower
-right corner of your screen. An engineer will reach out to you shortly.
+First, you'll want to gather some debugging logs so you can see what's happening.
 
-1. Set `DittoLogger.minimumLogLevel` to `Debug` before you initialize `Ditto(identity)`.
-1. Look at the logs. Do you see any helpful errors or warnings?
-1. Verify that your app id is the same on all devices
+By default, Ditto only logs errors and warnings. We want to increase the log level so that we see more information.
 
-If there is nothing in the logs, see the following sections for more information.
+### Setting the logs to Debug Level
 
-### Online Playground 
+In the following snippet, notice how we set the log level *before* initializing
+Ditto. This is because Ditto performs some background tasks during
+initialization related to file system access and authentication. You want to
+begin gathering logs before Ditto is initialized in order to capture any
+potential issues with those two background tasks.
+
+<SnippetGroup name="online-playground" />
+
+### Look for authentication success
+
+
+Verify that your app id is the same on all devices. Look for a log line that contains `app_id`:
+
+```
+Ditto::new_from_uninit_ditto; app_id = 22389e28-9590-4cbf-b683-b3ac5ab2269e; site_id = 13769592724050309105; history_tracking = Disabled; presence_broadcast_targets = SmallPeersOnly
+```
+
+Then, look to see that the authentication succeeded. 
+
+```
+AuthClient: authentication request succeeded
+```
+
+If the client has a valid certificate locally, it will not try to re-authenticate until that certificate expires. You will see the line:
+
+```
+AuthClient: refreshing token in 302399 seconds
+```
+
+### Syncing with the Big Peer
+
+A small peer syncronizes with the Big Peer using a WebSocket connection.
+
+The debug logs will tell you each step to create a successful WebSocket connection to the big peer. 
+
+First, the peer will discover the big peer and you'll see a `Discovered` event. 
+
+```
+peer_event = Discovered(WebsocketClientPeer(WebsocketClientRemotePeer { id: 4, transport_id: 3, local_announce: LocalAnnounceData { outer_protocol_version: 50, os: Generic, network_id: 2383820004, query_overlap_group: None, device_name: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537" }, connect_address: "wss://22389e28-9590-4cbf-b683-b3ac5ab2269e.cloud.ditto.live", routing_hint: RoutingHint(0), condition_sender: UnboundedSender { chan: Tx { inner: Chan { tx: Tx { block_tail: 0x242120, tail_position: 0 }, semaphore: Semaphore(0), rx_waker: AtomicWaker, tx_count: 2, rx_fields: "..." } } } }))
+```
+
+However, the small peer has not yet established a successful connection with
+this Big Peer instance quite yet. In order to verify that the connection has
+succeeded, you will see that the connection has succeeded with the
+`ConnectionEstablished` event.  
+
+```
+peer_event = ConnectionEstablished(PeerConnection { id: 4, connection_type: WsClient, remote_announce: Announce { outer_protocol_version: Some('2'), os: Some(Linux), network_id: Some(1356909299), query_overlap_group: None, device_name: Some("Ditto Cloud") }, remote_peer_id: SiteIdAndPubKey([...])
+```
+
+You will then see that the underlying physical replication session has been
+started with `phy started`. The remote key represents the public key
+`pkSOME_BYTES` of the Big Peer instance you are connected to. 
+
+The following is just an example, and not a guaranteed static identifer.
+
+```
+phy started; remote = pkAocCgkMCh0wD6Y83qm2UHtiN6264Jivvimg6xdR778ODaKODFKw
+```
+
+And then you will see something like this as the final message that the WebSocket client has successfully connected. 
+
+```
+VirtConnElectedNewConn { new_conn: Some((4, WsClient)), old_conn: None }
+```
+
+### Verifying correct permissions
+
+Once the peer is authorized, it will begin to print both the known local and
+remote permissions for this peer at a regular interval (30 seconds). Local
+permissions refer to the current peer that is running on the device. Remote
+permissions refer to any permissions from other peers that it is currently
+connected to.
+
+```
+local permission: Permission { read: PermissionRules { everything: true, queries_by_collection: {} }, write: PermissionRules { everything: true, queries_by_collection: {} } }, remote permission: Permission { read: PermissionRules { everything: true, queries_by_collection: {} }, write: PermissionRules { everything: true, queries_by_collection: {} } }
+```
+
+You will want to verify that these permissions are correct and what you expect. A peer cannot subscribe to a colleciton that it is not authorized to do so.
+
+The Big Peer remote permission will always be the following by default. This
+means that the big peer will have access to read and write. This is another way
+to verify that the big peer is connected and replication has started.
+
+```
+write: { everything: true, queries_by_collection: {} }
+read: { everything: true, queries_by_collection: {} }
+```
+
+### Verifying correct subscriptions
+
+Once the peer is authorized, it will begin to print the active subscriptions at
+a regular interval (30seconds).
+
+```
+local subscription: Subscription { everything: false, queries: {"__presence": {Query { expr: "_id != '13407763363308666127' && v == 3 && t > 1682717143093", order_by: [], limit: None, offset: None }}, "tasks": {Query { expr: "isDeleted == false", order_by: [], limit: None, offset: None }}} }, remote subscription: Subscription { everything: true, queries: {} }
+```
+
+Every peer includes by default some internal subscriptions. These are denoted by
+a double underscore (`__`) before the collection name. For example, you will
+likely see a subscription to the `__presence` collection.
+
+```
+{"__presence": { expr: "_id != '13407763363308666127' && v == 3 && t > 1682717143093", order_by: [], limit: None, offset: None }}
+```
+
+Similar to the permissions, you will also see a list of remote subscriptions.
+The big peer subscribes to everything, so you will see the following line which
+references the big peer:
+
+```
+remote subscription: Subscription { everything: true, queries: {} }
+```
+
+Application-level subscriptions will be listed by collection. For exmaple, for a samll peer subscribing to all tasks that are not deleted, you will see:
+
+```
+"tasks": {Query { expr: "isDeleted == false", order_by: [], limit: None, offset: None }}} 
+```
+
+### Writes
+
+For each write that is made to the local database, you will see a message like 
+
+```
+Write txn committed; txn_id = 40; originator = User
+```
+
+and
+
+```
+Notifying a database change; transaction = 40
+```
+
+Then, ditto will print again the active subscriptions and permissions to the log as in the above section.
+
+The small peer will then create what is called an "update file" -- you will see this in the logs as
+```
+Creating a sending update, sending_update_path = "pkA/pkB/sending_update"
+```
+
+pkA and pkB are the two peers involved in the exchange.
+
+Once the update file has completed, you will see the following line, which
+indicates that the local peer is ready to send the new update to the remote
+peer. This time elapsed is only for local generation of the update file. The
+local write still has not been syncronized to other peers.  
+
+```
+update creation done; since_index = 40; new_update_created = true; num_docs = 1; elapsed = 908us 708ns
+```
+
+Once the process has completed successfully on the local peer, you will see
+```
+No next update chunk to send - setting is_ready to false
+No message to send
+```
+
+This indicates that the update file sync process has been successful, and the local replication process has completed.
+
+### Troubleshooting
 
 #### Did you copy your playground token and App ID correctly? 
+
+If the app_id is not the same on all devices, you should do the following:
 
 1. Login to the [Portal](https://portal.ditto.live) 
 1. Go to your App.
@@ -67,28 +230,30 @@ your IT administrator to see if your computer is configured to block WebSocket c
 
 ### Online with Authentication
 
-:::info
+#### Check permissions
+
 Verify this isn't simply a permission misconfiguration issue. Are you able to
-try the operations with global read and write permission to verify it succeeds
-in this case? That could narrow down what's going on.
-:::
+try the operations with global read and write permission to verify that sync succeeds
+in this case? 
+
 
 #### Did you follow the [tutorial](./security/authentication#tutorial)?
 
 The tutorial is your best guide for implementing this correctly. See the [code on GitHub for a complete working example](https://github.com/getditto/samples/tree/main/authentication).
 
-#### Is the server behind `https` and open? 
+#### Is your authentication server behind `https` and open? 
 
-Ensure that Ditto's Big Peer server hosted in the United States on AWS can send a POST request to your authentication server. 
 
-#### Are you implementing the delegates correctly? 
+#### Common mistakes
 
-`authenticationExpiringSoon` and `authenticationRequired` both need to be
+1. Ensure that Ditto's Big Peer server hosted in the United States on AWS can send a POST request to your authentication server. Send a POST request to your server with a JSON stringified body.
+1. `authenticationExpiringSoon` and `authenticationRequired` both need to be
 implemented according to the [sample
 code](./security/authentication#creating-your-client).
-
-Do not create subscriptions inside the callbacks. These callbacks are only
+1. Do not create subscriptions inside the callbacks. These callbacks are only
 called on first launch and when the certificate expires.
+1. Keep a strong reference to the AuthClient for the duration of the 
+
 
 #### Verify that your webhook provider name is [correctly copied in the Ditto portal](./security/authentication#login).
 
@@ -371,3 +536,10 @@ or:
 i.e. something is blocking `Internal`.
 
 This might not have any observable effect, but if it does, it is most likely to manifest as slow/unreliable Ditto Bus connections, an inaccurate presence viewer, or slow/unreliable multihop replication. Ditto's internal mesh presence component must persist an update every 30s for these systems to keep working. If presence can’t do this because it’s blocked by another write transaction, those systems will begin to to fail until presence can successfully write its next update. This scenario should automatically recover just fine once the blocking write transaction finishes.
+
+## Still stuck?
+
+If you continue to have problems, please email us at
+[support@ditto.live](mailto:support@ditto.live) or [login to your Ditto
+account](https://portal.ditto.live) to chat with the support bot in the lower
+right corner of your screen. An engineer will reach out to you shortly.
