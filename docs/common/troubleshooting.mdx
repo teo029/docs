@@ -265,7 +265,7 @@ The tutorial is your best guide for implementing this correctly. See the [code o
 
 #### Common mistakes
 
-1. Ensure that Ditto's Big Peer server hosted in the United States on AWS can send a POST request to your authentication server. Send a POST request to your server with a JSON stringified body.
+1. Send a POST request with a JSON stringified body to your server to ensure that the AWS-hosted Big Peer servers located in U.S. regions successfully send POST requests to your authentication server.
 1. `authenticationExpiringSoon` and `authenticationRequired` both need to be
 implemented according to the [sample
 code](./security/authentication#creating-your-client).
