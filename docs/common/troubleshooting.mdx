@@ -552,7 +552,9 @@ or:
 
 That is, something is blocking `Internal`.
 
-This might not have any observable effect, but if it does, it is most likely to manifest as slow/unreliable Ditto Bus connections, an inaccurate presence viewer, or slow/unreliable multihop replication. Ditto's internal mesh presence component must persist an update every 30s for these systems to keep working. If presence can’t do this because it’s blocked by another write transaction, those systems will begin to to fail until presence can successfully write its next update. This scenario should automatically recover just fine once the blocking write transaction finishes.
+If you observe slow and unreliable Ditto Bus connections, an inaccurate presence viewer, or slow and unreliable multi-hop data replication, a Write transaction may be preventing the internal mesh presence component to persist data in regular 30-second intervals. 
+
+Once the blocking Write transaction is complete, the observed issue should resolve itself automatically. 
 
 ## Still stuck?
 
