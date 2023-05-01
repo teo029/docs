@@ -16,7 +16,7 @@ By default, Ditto only logs errors and warnings. We want to increase the log lev
 
 ### Setting the logs to Debug Level
 
-In the following snippet, notice how we set the log level *before* initializing
+As demonstrated in the following snippet, obtain the database debug logs _before_ Ditto is initialized so that any potential issues related to the file system access and authentication background tasks that run during initialization are tracked. 
 Ditto. This is because Ditto performs some background tasks during
 initialization related to file system access and authentication. You want to
 begin gathering logs before Ditto is initialized in order to capture any
