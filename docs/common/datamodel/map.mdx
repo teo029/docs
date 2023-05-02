@@ -73,7 +73,7 @@ When both devices synchronize, both updates will merge. You will see the mileage
 
 What would be the best approach when two devices make changes to the same field on the same document while both are offline, and then connect again. If you use a Register, the CRDT gives priority to the “latest” change, because Registers are always Last Writer Wins. But if you would like to audit these conflicts, you can use a Map.
 
-For example, say we want to render the inspections performed on a car in a list view. We provide a field insepctions and give each writer an ID as the field. For example, say you have two peers: peer 1 has a unique ID of `ghj789` and peer 2 has an ID `def456`.
+For example, say we want to render the inspections performed on a car in a list view. We provide a field inspections and give each writer an ID as the field. For example, say you have two peers: peer 1 has a unique ID of `ghj789` and peer 2 has an ID `def456`.
 
 You can model that list of operations as a map object inside of your document. The UI can then choose how to render these changes based on whatever information each peer has provided in the map.
 
